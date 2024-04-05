@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  const User = sequelize.define(
-    "User",
+  sequelize.define(
+    "user",
     {
       id: {
         type: DataTypes.BIGINT,
@@ -28,5 +28,4 @@ module.exports = (sequelize) => {
     },
     { timestamps: false }
   );
-  return User;
 };
