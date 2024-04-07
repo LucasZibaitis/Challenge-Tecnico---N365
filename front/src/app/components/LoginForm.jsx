@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 
-export default function LoginForm() {
+export default function LoginForm({ setRegisterClicked, registerClicked }) {
   return (
     <div class="w-1/4 h-3/5 border bg-[#6366f1] rounded-3xl flex flex-col items-center py-10 gap-10">
       <div class="flex flex-col items-center gap-2 py-8">
@@ -21,9 +21,14 @@ export default function LoginForm() {
           Iniciar Sesión
         </button>
       </form>
-      <h3 class="text-white hover:underline cursor-pointer">
+      <button
+        class="text-white hover:underline cursor-pointer"
+        onClick={() => {
+          setRegisterClicked(true);
+        }}
+      >
         Crear nueva cuenta<span class=" font-bold"> aquí</span>
-      </h3>
+      </button>
     </div>
   );
 }
