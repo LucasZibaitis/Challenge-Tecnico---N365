@@ -8,7 +8,9 @@ const postLoggedUser = async (req, res) => {
     if (!user) {
       return res.status(401).json({ error: "Credenciales inválidas" });
     }
-    const accessToken = jwt.sign({ userId: user.id }, "secret", { expiresIn: "1h" });
+    const accessToken = jwt.sign({ userId: user.id }, "secret", {
+      expiresIn: "1h",
+    });
     res.json({ accessToken });
   } catch (error) {
     res.status(500).json({ error: error.message });

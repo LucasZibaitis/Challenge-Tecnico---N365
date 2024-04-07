@@ -14,7 +14,7 @@ router.post("/postLoggedUser", postLoggedUser);
 
 router.post("/postPayment", authenticateToken, postPayment);
 router.get("/getAllPayments", authenticateToken, getAllPayments);
-router.get("/getAllUsers", authenticateToken, getAllUsers);
+router.get("/getAllUsers", getAllUsers);
 router.get("/getPaymentsById", authenticateToken, getPaymentsById);
 
 module.exports = router;

@@ -1,7 +1,35 @@
 "use client";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function LoginForm({ setRegisterClicked, registerClicked }) {
+  const [userData, setUserData] = useState({
+    mail: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    setUserData((prevUserData) => ({
+      ...prevUserData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios
+        .post("http://localhost:3001/postLoggedUser", userData)
+        .then((response) => {
+          localStorage.setItem("accessToken", response.data.accessToken);
+          console.log(response.data.accessToken);
+        });
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
+
   return (
     <div class="w-1/4 h-3/5 border bg-[#6366f1] rounded-3xl flex flex-col items-center py-10 gap-10">
       <div class="flex flex-col items-center gap-2 py-8">
@@ -12,12 +40,20 @@ export default function LoginForm({ setRegisterClicked, registerClicked }) {
         <input
           class="rounded-full w-3/4 h-12 px-4 bg-[#c7d2fe]"
           placeholder="Email"
+          name="mail"
+          onChange={handleChange}
         ></input>
         <input
           class="rounded-full w-3/4 h-12 px-4 bg-[#c7d2fe]"
           placeholder="Contraseña"
+          name="password"
+          type="password"
+          onChange={handleChange}
         ></input>
-        <button class="rounded-full w-3/4 h-12 px-4 bg-[white] hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300">
+        <button
+          onClick={handleSubmit}
+          class="rounded-full w-3/4 h-12 px-4 bg-[white] hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300"
+        >
           Iniciar Sesión
         </button>
       </form>
