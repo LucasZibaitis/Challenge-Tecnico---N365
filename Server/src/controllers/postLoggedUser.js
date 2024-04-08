@@ -11,7 +11,7 @@ const postLoggedUser = async (req, res) => {
     const accessToken = jwt.sign({ userId: user.id }, "secret", {
       expiresIn: "1h",
     });
-    res.json({ accessToken });
+    res.json({ userId: user.id, accessToken });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

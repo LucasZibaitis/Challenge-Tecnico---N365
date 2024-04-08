@@ -26,7 +26,7 @@ export default function LoginForm({ setRegisterClicked, registerClicked }) {
         .post("http://localhost:3001/postLoggedUser", userData)
         .then((response) => {
           localStorage.setItem("accessToken", response.data.accessToken);
-          console.log(response.data.accessToken);
+          localStorage.setItem("userId", response.data.userId);
           if (response.data.accessToken) {
             router.push("/home");
           }
