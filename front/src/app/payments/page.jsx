@@ -5,7 +5,23 @@ import axios from "axios";
 import LogOutButton from "../components/LogOutButton";
 
 export default function Payments() {
+  const [payments, setPayments] = useState([]);
   const router = useRouter();
+
+  const fetchPayments = async () => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const userId = localStorage.getItem("userId");
+      const config = { headers: { Authorization: `Bearer ${accessToken}` } };
+      await axios
+        .get(`http://localhost:3001/getPaymentsById?userId=${userId}`, config)
+        .then((response) => setPayments(response.data));
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    fetchPayments();
+  }, []);
 
   return (
     <main class="flex flex-col items-center justify-center h-screen gap-4">
