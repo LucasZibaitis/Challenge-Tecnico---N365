@@ -5,13 +5,13 @@ export default function HomeButton(props) {
   const router = useRouter();
   return (
     <div
-      class="flex flex-col items-center justify-center border rounded-md border-2 bg-[#e0f2fe] w-1/6 h-72 cursor-pointer gap-8"
+      class="flex flex-col items-center justify-center border rounded-3xl border-2 bg-[#6366f1] w-1/6 h-72 cursor-pointer hover:text-white hover:scale-105 transition-all duration-300 py-10"
       onClick={() => {
         router.push(props.pushTo);
       }}
     >
-      <img src={props.image} width={190} />
-      <h1 class="font-bold text-2xl">{props.text}</h1>
+      <img src={props.image} width={props.width}/>
+      <h1 class="text-2xl text-white font-bold" style={{marginTop: props.mt}}>{props.text}</h1>
     </div>
   );
 }

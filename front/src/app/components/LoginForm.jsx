@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 
 export default function LoginForm({ setRegisterClicked, registerClicked }) {
@@ -7,6 +8,8 @@ export default function LoginForm({ setRegisterClicked, registerClicked }) {
     mail: "",
     password: "",
   });
+
+  const router = useRouter();
 
   const handleChange = (e) => {
     const { value, name } = e.target;
@@ -24,6 +27,9 @@ export default function LoginForm({ setRegisterClicked, registerClicked }) {
         .then((response) => {
           localStorage.setItem("accessToken", response.data.accessToken);
           console.log(response.data.accessToken);
+          if (response.data.accessToken) {
+            router.push("/home");
+          }
         });
     } catch (error) {
       console.log(error.response.data);

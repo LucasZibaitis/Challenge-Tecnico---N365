@@ -35,7 +35,7 @@ export default function RegisterForm({ setRegisterClicked, registerClicked }) {
         <h1 class="text-5xl text-white font-semibold">The Agency</h1>
         <h2 class="text-2xl text-white">Challenge Técnico </h2>
       </div>
-      <form class="grid grid-cols-2 gap-4 w-3/4 pt-10">
+      <form class="grid grid-cols-2 gap-4 w-3/4 pt-4">
         <input
           class="rounded-full h-12 px-4 bg-[#c7d2fe]"
           placeholder="Nombre"
