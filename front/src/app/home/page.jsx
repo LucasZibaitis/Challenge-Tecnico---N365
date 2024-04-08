@@ -3,9 +3,14 @@ import LogOutButton from "../components/LogOutButton";
 
 export default function Home() {
   return (
-    <main className="h-screen flex flex-col items-center justify-center gap-20">
-      <LogOutButton />
-      <div class="flex items-center justify-center gap-20 w-full">
+    <main className="h-screen flex flex-col items-center justify-center gap-5">
+      <div class="flex items-center justify-between gap-96">
+        <h1 class="text-6xl font-semibold text-[#6366f1] tracking-tighter">
+          N365
+        </h1>
+        <LogOutButton />
+      </div>
+      <div class="flex items-center justify-center gap-10 w-full">
         <HomeButton
           text="Registrar pagos"
           image="./paymentIconWhite.svg"

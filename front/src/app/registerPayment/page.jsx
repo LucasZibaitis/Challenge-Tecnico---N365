@@ -76,7 +76,7 @@ export default function RegisterPayment() {
           <div class="flex flex-col w-1/2 gap-1">
             <label class="text-white">Tipo de Pago</label>
             <select
-              class="rounded-md border-2 px-2 w-full h-8 text-sm"
+              class="rounded-md border-2 px-2 w-full h-8 text-sm text-[#6366f1]"
               name="type"
               onChange={handleInputChange}
             >
@@ -122,7 +122,7 @@ export default function RegisterPayment() {
             <input
               type="date"
               name="date"
-              class="rounded-md border-2 px-2 w-full h-8"
+              class="rounded-md border-2 px-2 w-full h-8 text-[#6366f1] text-sm"
               onChange={handleInputChange}
             ></input>
           </div>
@@ -139,7 +139,7 @@ export default function RegisterPayment() {
       </div>
       <div class="w-1/3 flex items-center justify-between gap-4">
         <button
-          class="text-white rounded-full border-2 w-48 h-10 font-semibold bg-[#6366f1] hover:bg-white hover:text-[#6366f1] hover:border-[#6366f1] transition-all duration-300"
+          class="text-white rounded-full w-48 h-10 font-semibold bg-[#6366f1] hover:border-2 hover:bg-white hover:text-[#6366f1] hover:border-[#6366f1] transition-all duration-300"
           onClick={() => {
             router.push("/home");
           }}
@@ -147,7 +147,7 @@ export default function RegisterPayment() {
           Volver al inicio
         </button>
         <button
-          class="text-white rounded-full border-2 w-48 h-10 font-semibold bg-[#6366f1] hover:bg-white hover:text-[#6366f1] hover:border-[#6366f1] transition-all duration-300"
+          class="text-white rounded-full  w-48 h-10 font-semibold bg-[#6366f1] hover:border-2 hover:bg-white hover:text-[#6366f1] hover:border-[#6366f1] transition-all duration-300"
           onClick={() => {
             router.push("/payments");
           }}

@@ -32,7 +32,7 @@ export default function RegisterForm({ setRegisterClicked, registerClicked }) {
   return (
     <div class="w-1/4 h-3/5 border bg-[#6366f1] rounded-3xl flex flex-col items-center pt-10">
       <div class="flex flex-col items-center gap-2 py-8">
-        <h1 class="text-5xl text-white font-semibold">The Agency</h1>
+        <h1 class="text-5xl text-white font-semibold">N365</h1>
         <h2 class="text-2xl text-white">Challenge Técnico </h2>
       </div>
       <form class="grid grid-cols-2 gap-4 w-3/4 pt-4">
