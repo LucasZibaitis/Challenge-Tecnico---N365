@@ -68,7 +68,7 @@ export default function Payments() {
 
   const applyFiltersAndSort = () => {
     let filteredPayments = [...payments];
-
+    console.log(filteredPayments);
     if (filterType !== "Todos") {
       filteredPayments = filteredPayments.filter(
         (payment) => payment.type === filterType
@@ -87,7 +87,15 @@ export default function Payments() {
       );
     }
 
-    if (sortOption === "mayorMonto") {
+    filteredPayments.forEach((payment) => {
+      payment.parsedDate = new Date(formatDate(payment.date));
+    });
+
+    if (sortOption === "masReciente") {
+      filteredPayments.sort((a, b) => b.parsedDate - a.parsedDate);
+    } else if (sortOption === "masAntigua") {
+      filteredPayments.sort((a, b) => a.parsedDate - b.parsedDate);
+    } else if (sortOption === "mayorMonto") {
       filteredPayments.sort(
         (a, b) => parseFloat(b.amount) - parseFloat(a.amount)
       );
@@ -96,6 +104,10 @@ export default function Payments() {
         (a, b) => parseFloat(a.amount) - parseFloat(b.amount)
       );
     }
+
+    filteredPayments.forEach((payment) => {
+      delete payment.parsedDate;
+    });
 
     return filteredPayments;
   };
@@ -165,7 +177,7 @@ export default function Payments() {
               value={sortOption}
             >
               <option value="masReciente">Fecha: más reciente</option>
-              <option>Fecha: más antigua</option>
+              <option value="masAntigua">Fecha: más antigua</option>
               <option value="mayorMonto">Monto: más alto</option>
               <option value="menorMonto">Monto: más bajo</option>
             </select>
