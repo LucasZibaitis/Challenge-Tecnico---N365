@@ -230,26 +230,28 @@ export default function Payments() {
               onChange={handleFilterChange}
             ></input>
           </div>
-          <div>
-            <button
-              onClick={handleClearFilters}
-              class="text-[#6366f1] font-semibold rounded-full  bg-white w-40 h-10 hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300"
-            >
-              Eliminar filtros
-            </button>
-          </div>
-          <div>
-            <button class="text-[#6366f1] font-semibold rounded-full  bg-white w-40 h-10 hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300">
-              <CSVLink
-                data={payments}
-                filename={"historialDePagos.csv"}
-                separator={";"}
-                headers={csvHeaders}
+          <div class="flex flex-col gap-2 w-4/5 h-full justify-between">
+            <div>
+              <button
+                onClick={handleClearFilters}
+                class="text-[white] border mt-4 font-semibold rounded-full  w-40 h-10 hover:bg-[white] hover:border hover:text-[#6366f1] hover:font-bold transition-all duration-300"
               >
-                {" "}
-                Exportar a CSV
-              </CSVLink>
-            </button>
+                Eliminar filtros
+              </button>
+            </div>
+            <div>
+              <button class="text-[white] border mt-4 font-semibold rounded-full  w-40 h-10 hover:bg-[white] hover:border hover:text-[#6366f1] hover:font-bold transition-all duration-300">
+                <CSVLink
+                  data={payments}
+                  filename={"historialDePagos.csv"}
+                  separator={";"}
+                  headers={csvHeaders}
+                >
+                  {" "}
+                  Exportar a CSV
+                </CSVLink>
+              </button>
+            </div>
           </div>
         </div>
         <div class="w-2/3 flex flex-col h-full justify-center gap-1 py-6">
