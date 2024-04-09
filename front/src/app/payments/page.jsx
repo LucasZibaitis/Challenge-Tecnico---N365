@@ -185,7 +185,7 @@ export default function Payments() {
             <label class="text-white">Buscar por destinatario</label>
             <input
               name="recipient"
-              class=" rounded-md  px-2 h-8"
+              class=" rounded-md  px-2 h-8 text-[#6366f1] outline-current"
               onChange={handleFilterChange}
               value={inputRecipient}
             ></input>
@@ -194,7 +194,7 @@ export default function Payments() {
             <label class="text-white">Ordenar por</label>
             <select
               name="sort"
-              class="rounded-md  px-2 h-8 text-sm text-[#6366f1]"
+              class="rounded-md  px-2 h-8 text-sm text-[#6366f1] outline-current"
               onChange={handleFilterChange}
               value={sortOption}
             >
@@ -208,7 +208,7 @@ export default function Payments() {
             <label class="text-white">Filtrar por Tipo de Pago</label>
             <select
               name="type"
-              class="rounded-md px-2 h-8 text-sm text-[#6366f1]"
+              class="rounded-md px-2 h-8 text-sm text-[#6366f1] outline-current"
               onChange={handleFilterChange}
               value={filterType}
             >
@@ -226,7 +226,7 @@ export default function Payments() {
             <input
               name="date"
               type="date"
-              class="rounded-md  px-2 h-8 text-[#6366f1] text-sm"
+              class="rounded-md  px-2 h-8 text-[#6366f1] text-sm outline-current"
               onChange={handleFilterChange}
             ></input>
           </div>
@@ -257,7 +257,17 @@ export default function Payments() {
         <div class="w-2/3 flex flex-col h-full justify-center gap-1 py-6">
           <label class="text-white">Resultados</label>
           <div class="w-11/12 h-full bg-white rounded-lg flex flex-col">
-            <div class="h-full">{renderPayments()}</div>
+            <div class="h-full">
+              {totalPayments ? (
+                renderPayments()
+              ) : (
+                <div class="h-full flex items-center justify-center">
+                  <h1 class="text-lg text-[#6366f1]">
+                    No se encontraron pagos.
+                  </h1>
+                </div>
+              )}
+            </div>
             <div class="flex h-12 items-center justify-around border-[#6366f1]">
               <div class="flex items-center justify-center w-full">
                 {currentPage === 1 ? null : (

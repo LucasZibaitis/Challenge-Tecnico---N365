@@ -44,13 +44,13 @@ export default function LoginForm({ setRegisterClicked, registerClicked }) {
       </div>
       <form class="flex flex-col items-center gap-4 w-full">
         <input
-          class="rounded-full w-3/4 h-12 px-4 bg-[#c7d2fe]"
+          class="rounded-full w-3/4 h-12 px-4 bg-[#c7d2fe] outline-[#6366f1]"
           placeholder="Email"
           name="mail"
           onChange={handleChange}
         ></input>
         <input
-          class="rounded-full w-3/4 h-12 px-4 bg-[#c7d2fe]"
+          class="rounded-full w-3/4 h-12 px-4 bg-[#c7d2fe] outline-[#6366f1]"
           placeholder="Contraseña"
           name="password"
           type="password"

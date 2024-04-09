@@ -19,8 +19,17 @@ export default function RegisterPayment() {
   const handleInputChange = (e) => {
     const { value, name } = e.target;
     if (name === "type") {
-      if (value === "otro") {
+      if (
+        value !== "initial" &&
+        value !== "Tarjeta de Débito" &&
+        value !== "Tarjeta de Crédito" &&
+        value !== "Depósito" &&
+        value !== "Transferencia" &&
+        value !== "Efectivo"
+      ) {
         setOtroSelected(true);
+      } else {
+        setOtroSelected(false);
       }
     }
     if (name === "date" && value) {
@@ -37,7 +46,6 @@ export default function RegisterPayment() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
     try {
       const accessToken = localStorage.getItem("accessToken");
       const config = { headers: { Authorization: `Bearer ${accessToken}` } };
@@ -65,18 +73,21 @@ export default function RegisterPayment() {
             <label class="text-white">Monto</label>
             <input
               name="amount"
-              class=" rounded-md  px-2 w-full h-8"
+              class=" text-[#6366f1] rounded-md  px-2 w-full h-8 outline-current"
               onChange={handleInputChange}
+              value={payment.amount}
             ></input>
           </div>
           <div class="flex flex-col w-1/2 gap-1">
             <label class="text-white">Tipo de Pago</label>
             <select
-              class="rounded-md  px-2 w-full h-8 text-sm text-[#6366f1]"
+              class="rounded-md  px-2 w-full h-8 text-sm text-[#6366f1] outline-current"
               name="type"
               onChange={handleInputChange}
             >
-              <option class="text-sm">Seleccionar Tipo de Pago</option>
+              <option value="initial" class="text-sm">
+                Seleccionar Tipo de Pago
+              </option>
               <option value="Efectivo" class="text-sm">
                 Efectivo
               </option>
@@ -99,7 +110,7 @@ export default function RegisterPayment() {
             {otroSelected ? (
               <input
                 name="type"
-                class=" rounded-md  px-2 w-full h-8"
+                class=" rounded-md  px-2 w-full h-8 outline-current text-[#6366f1]"
                 placeholder="Ingrese el tipo de pago"
                 onChange={handleInputChange}
               ></input>
@@ -109,7 +120,7 @@ export default function RegisterPayment() {
             <label class="text-white">Destinatario</label>
             <input
               name="recipient"
-              class=" rounded-md  px-2 w-full h-8"
+              class="text-[#6366f1]  rounded-md  px-2 w-full h-8 outline-current"
               onChange={handleInputChange}
             ></input>
           </div>
@@ -118,7 +129,7 @@ export default function RegisterPayment() {
             <input
               type="date"
               name="date"
-              class="rounded-md px-2 w-full h-8 text-[#6366f1] text-sm"
+              class="rounded-md px-2 w-full h-8 text-[#6366f1] text-sm outline-current"
               onChange={handleInputChange}
             ></input>
           </div>

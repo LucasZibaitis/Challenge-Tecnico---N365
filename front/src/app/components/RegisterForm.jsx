@@ -37,26 +37,26 @@ export default function RegisterForm({ setRegisterClicked, registerClicked }) {
       </div>
       <form class="grid grid-cols-2 gap-4 w-3/4 pt-4">
         <input
-          class="rounded-full h-12 px-4 bg-[#c7d2fe]"
+          class="rounded-full h-12 px-4 bg-[#c7d2fe] outline-[#6366f1]"
           placeholder="Nombre"
           name="name"
           onChange={handleChange}
         ></input>
         <input
-          class="rounded-full h-12 px-4 bg-[#c7d2fe]"
+          class="rounded-full h-12 px-4 bg-[#c7d2fe] outline-[#6366f1]"
           placeholder="Apellido"
           onChange={handleChange}
           name="lastName"
         ></input>
         <input
-          class="rounded-full h-12 px-4 bg-[#c7d2fe] col-span-2"
+          class="rounded-full h-12 px-4 bg-[#c7d2fe] col-span-2 outline-[#6366f1]"
           placeholder="Email"
           name="mail"
           onChange={handleChange}
         ></input>
         <div className="flex justify-between gap-4 col-span-2">
           <input
-            class="rounded-full h-12 w-full px-4 bg-[#c7d2fe]"
+            class="rounded-full h-12 w-full px-4 bg-[#c7d2fe] outline-[#6366f1]"
             placeholder="Contraseña"
             type={hidePassword ? "password" : null}
             onChange={handleChange}
