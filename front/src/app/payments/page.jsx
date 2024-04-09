@@ -25,10 +25,8 @@ export default function Payments() {
 
   const indexOfLastPayment = currentPage * paymentsPerPage;
   const indexOfFirstPayment = indexOfLastPayment - paymentsPerPage;
-  const currentPayments = payments.slice(
-    indexOfFirstPayment,
-    indexOfLastPayment
-  );
+
+  console.log(indexOfLastPayment);
 
   const fetchPayments = async () => {
     try {
@@ -38,6 +36,18 @@ export default function Payments() {
       await axios
         .get(`http://localhost:3001/getPaymentsById?userId=${userId}`, config)
         .then((response) => setPayments(response.data));
+    } catch (error) {}
+  };
+
+  const deletePayment = async (id) => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const config = { headers: { Authorization: `Bearer ${accessToken}` } };
+      await axios.delete(
+        `http://localhost:3001/deletePayment?id=${id}`,
+        config
+      );
+      fetchPayments();
     } catch (error) {}
   };
 
@@ -68,7 +78,6 @@ export default function Payments() {
 
   const applyFiltersAndSort = () => {
     let filteredPayments = [...payments];
-    console.log(filteredPayments);
     if (filterType !== "Todos") {
       filteredPayments = filteredPayments.filter(
         (payment) => payment.type === filterType
@@ -112,8 +121,11 @@ export default function Payments() {
     return filteredPayments;
   };
 
+  const filteredAndSortedPayments = applyFiltersAndSort();
+  const totalPayments = filteredAndSortedPayments.length;
+  const totalPages = Math.ceil(totalPayments / paymentsPerPage);
+
   const renderPayments = () => {
-    const filteredAndSortedPayments = applyFiltersAndSort();
     const paginatedPayments = filteredAndSortedPayments.slice(
       indexOfFirstPayment,
       indexOfLastPayment
@@ -130,7 +142,17 @@ export default function Payments() {
           key={payment.id}
           class="flex flex-col justify-center border-b-2 border-[#6366f1] w-full h-20 px-6 "
         >
-          <h1 class="text-xs">{payment.date}</h1>
+          <div class="flex justify-between">
+            <h1 class="text-xs">{payment.date}</h1>
+            <h1
+              onClick={() => {
+                deletePayment(payment.id);
+              }}
+              class="text-xs text-red-500 font-bold cursor-pointer"
+            >
+              X
+            </h1>
+          </div>
           <h1 class="font-bold">{payment.recipient}</h1>
           <div class="flex justify-between">
             <h1>{payment.type}</h1>
@@ -163,7 +185,7 @@ export default function Payments() {
             <label class="text-white">Buscar por destinatario</label>
             <input
               name="recipient"
-              class=" rounded-md border-2 px-2 h-8"
+              class=" rounded-md  px-2 h-8"
               onChange={handleFilterChange}
               value={inputRecipient}
             ></input>
@@ -172,7 +194,7 @@ export default function Payments() {
             <label class="text-white">Ordenar por</label>
             <select
               name="sort"
-              class="rounded-md border-2 px-2 h-8 text-sm text-[#6366f1]"
+              class="rounded-md  px-2 h-8 text-sm text-[#6366f1]"
               onChange={handleFilterChange}
               value={sortOption}
             >
@@ -186,7 +208,7 @@ export default function Payments() {
             <label class="text-white">Filtrar por Tipo de Pago</label>
             <select
               name="type"
-              class="rounded-md border-2 px-2 h-8 text-sm text-[#6366f1]"
+              class="rounded-md px-2 h-8 text-sm text-[#6366f1]"
               onChange={handleFilterChange}
               value={filterType}
             >
@@ -204,20 +226,20 @@ export default function Payments() {
             <input
               name="date"
               type="date"
-              class="rounded-md border-2 px-2 h-8 text-[#6366f1] text-sm"
+              class="rounded-md  px-2 h-8 text-[#6366f1] text-sm"
               onChange={handleFilterChange}
             ></input>
           </div>
           <div>
             <button
               onClick={handleClearFilters}
-              class="text-[#6366f1] font-semibold rounded-full border-2 bg-white w-40 h-10 hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300"
+              class="text-[#6366f1] font-semibold rounded-full  bg-white w-40 h-10 hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300"
             >
               Eliminar filtros
             </button>
           </div>
           <div>
-            <button class="text-[#6366f1] font-semibold rounded-full border-2 bg-white w-40 h-10 hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300">
+            <button class="text-[#6366f1] font-semibold rounded-full  bg-white w-40 h-10 hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300">
               <CSVLink
                 data={payments}
                 filename={"historialDePagos.csv"}
@@ -253,18 +275,18 @@ export default function Payments() {
                 <h1 class="text-lg font-bold text-[#6366f1]">{currentPage}</h1>
               </div>
               <div class="flex items-center justify-center w-full">
-                <img
-                  src="./arrowRight.svg"
-                  width={40}
-                  class="hover:scale-110 transition-all duration-300 cursor-pointer"
-                  onClick={() =>
-                    setCurrentPage(
-                      currentPage < Math.ceil(payments.length / paymentsPerPage)
-                        ? currentPage + 1
-                        : currentPage
-                    )
-                  }
-                />
+                {totalPages > 1 && currentPage < totalPages && (
+                  <img
+                    src="./arrowRight.svg"
+                    width={40}
+                    class="hover:scale-110 transition-all duration-300 cursor-pointer"
+                    onClick={() =>
+                      setCurrentPage(
+                        currentPage < totalPages ? currentPage + 1 : currentPage
+                      )
+                    }
+                  />
+                )}
               </div>
             </div>
           </div>

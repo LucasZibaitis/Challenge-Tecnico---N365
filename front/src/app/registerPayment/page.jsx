@@ -18,12 +18,10 @@ export default function RegisterPayment() {
 
   const handleInputChange = (e) => {
     const { value, name } = e.target;
-    if (value === "otro") {
-      setOtroSelected(true);
-      setPayment((prevPayment) => ({
-        ...prevPayment,
-        [name]: value,
-      }));
+    if (name === "type") {
+      if (value === "otro") {
+        setOtroSelected(true);
+      }
     }
     if (name === "date" && value) {
       setPayment((prevPayment) => ({
@@ -67,14 +65,14 @@ export default function RegisterPayment() {
             <label class="text-white">Monto</label>
             <input
               name="amount"
-              class=" rounded-md border-2 px-2 w-full h-8"
+              class=" rounded-md  px-2 w-full h-8"
               onChange={handleInputChange}
             ></input>
           </div>
           <div class="flex flex-col w-1/2 gap-1">
             <label class="text-white">Tipo de Pago</label>
             <select
-              class="rounded-md border-2 px-2 w-full h-8 text-sm text-[#6366f1]"
+              class="rounded-md  px-2 w-full h-8 text-sm text-[#6366f1]"
               name="type"
               onChange={handleInputChange}
             >
@@ -101,7 +99,7 @@ export default function RegisterPayment() {
             {otroSelected ? (
               <input
                 name="type"
-                class=" rounded-md border-2 px-2 w-full h-8"
+                class=" rounded-md  px-2 w-full h-8"
                 placeholder="Ingrese el tipo de pago"
                 onChange={handleInputChange}
               ></input>
@@ -111,7 +109,7 @@ export default function RegisterPayment() {
             <label class="text-white">Destinatario</label>
             <input
               name="recipient"
-              class=" rounded-md border-2 px-2 w-full h-8"
+              class=" rounded-md  px-2 w-full h-8"
               onChange={handleInputChange}
             ></input>
           </div>
@@ -120,7 +118,7 @@ export default function RegisterPayment() {
             <input
               type="date"
               name="date"
-              class="rounded-md border-2 px-2 w-full h-8 text-[#6366f1] text-sm"
+              class="rounded-md px-2 w-full h-8 text-[#6366f1] text-sm"
               onChange={handleInputChange}
             ></input>
           </div>
@@ -129,7 +127,7 @@ export default function RegisterPayment() {
               handleSubmit(e);
             }}
             type="submit"
-            class="text-[#6366f1] font-semibold mt-10 rounded-full border-2 bg-white w-1/3 h-10 hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300"
+            class="text-[#6366f1] font-semibold mt-10 rounded-full bg-white w-1/3 h-10 hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300"
           >
             Registrar Pago
           </button>
