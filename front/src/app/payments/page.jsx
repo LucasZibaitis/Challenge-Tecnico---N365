@@ -10,7 +10,7 @@ import { CSVLink, CSVDownload } from "react-csv";
 export default function Payments() {
   const [payments, setPayments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [paymentsPerPage] = useState(8);
+  const [paymentsPerPage, setPaymentsPerPage] = useState(8);
   const [filterType, setFilterType] = useState("Todos");
   const [filterDate, setFilterDate] = useState();
   const [inputRecipient, setInputRecipient] = useState("");
@@ -66,27 +66,25 @@ export default function Payments() {
     setCurrentPage(1);
   };
 
-  const renderPayments = () => {
-    let filteredPayments = currentPayments;
+  const applyFiltersAndSort = () => {
+    let filteredPayments = [...payments];
 
     if (filterType !== "Todos") {
-      filteredPayments = currentPayments.filter(
+      filteredPayments = filteredPayments.filter(
         (payment) => payment.type === filterType
       );
     }
 
     if (filterDate) {
-      filteredPayments = filteredPayments.filter((payment) => {
-        return payment.date === filterDate;
-      });
+      filteredPayments = filteredPayments.filter(
+        (payment) => payment.date === filterDate
+      );
     }
 
     if (inputRecipient) {
-      filteredPayments = filteredPayments.filter((payment) => {
-        return payment.recipient
-          .toLowerCase()
-          .includes(inputRecipient.toLowerCase());
-      });
+      filteredPayments = filteredPayments.filter((payment) =>
+        payment.recipient.toLowerCase().includes(inputRecipient.toLowerCase())
+      );
     }
 
     if (sortOption === "mayorMonto") {
@@ -99,7 +97,16 @@ export default function Payments() {
       );
     }
 
-    return filteredPayments.map((payment) => {
+    return filteredPayments;
+  };
+
+  const renderPayments = () => {
+    const filteredAndSortedPayments = applyFiltersAndSort();
+    const paginatedPayments = filteredAndSortedPayments.slice(
+      indexOfFirstPayment,
+      indexOfLastPayment
+    );
+    return paginatedPayments.map((payment) => {
       const formattedAmount = parseFloat(payment.amount).toLocaleString(
         "es-AR",
         {
@@ -216,29 +223,37 @@ export default function Payments() {
           <div class="w-11/12 h-full bg-white rounded-lg flex flex-col">
             <div class="h-full">{renderPayments()}</div>
             <div class="flex h-12 items-center justify-around border-[#6366f1]">
-              <img
-                src="./arrowLeft.svg"
-                width={40}
-                class="hover:scale-110 transition-all duration-300 cursor-pointer"
-                onClick={() =>
-                  setCurrentPage(
-                    currentPage > 1 ? currentPage - 1 : currentPage
-                  )
-                }
-              />
-              <h1 class="text-lg font-bold text-[#6366f1]">{currentPage}</h1>
-              <img
-                src="./arrowRight.svg"
-                width={40}
-                class="hover:scale-110 transition-all duration-300 cursor-pointer"
-                onClick={() =>
-                  setCurrentPage(
-                    currentPage < Math.ceil(payments.length / paymentsPerPage)
-                      ? currentPage + 1
-                      : currentPage
-                  )
-                }
-              />
+              <div class="flex items-center justify-center w-full">
+                {currentPage === 1 ? null : (
+                  <img
+                    src="./arrowLeft.svg"
+                    width={40}
+                    class="hover:scale-110 transition-all duration-300 cursor-pointer"
+                    onClick={() =>
+                      setCurrentPage(
+                        currentPage > 1 ? currentPage - 1 : currentPage
+                      )
+                    }
+                  />
+                )}
+              </div>
+              <div class="flex items-center justify-center w-full">
+                <h1 class="text-lg font-bold text-[#6366f1]">{currentPage}</h1>
+              </div>
+              <div class="flex items-center justify-center w-full">
+                <img
+                  src="./arrowRight.svg"
+                  width={40}
+                  class="hover:scale-110 transition-all duration-300 cursor-pointer"
+                  onClick={() =>
+                    setCurrentPage(
+                      currentPage < Math.ceil(payments.length / paymentsPerPage)
+                        ? currentPage + 1
+                        : currentPage
+                    )
+                  }
+                />
+              </div>
             </div>
           </div>
         </div>
