@@ -9,7 +9,7 @@ Requisitos:
 3. Implementar una interfaz de usuario simple utilizando React que permita a los usuarios:
    - Registrar nuevos pagos, incluyendo detalles como el monto, la fecha, el tipo de pago y el destinatario.
    - Ver la lista de pagos realizados con la capacidad de filtrar por diferentes criterios, como fecha, monto, tipo de pago, etc.
-   - Realizar búsquedas en la lista de pagos utilizando un campo de búsqueda.
+   - Realizar búsquedas en la lista de pagos utilizando un campo de búsqueda 
 4. Implementar una autenticación básica utilizando sesiones o tokens JWT para que los usuarios puedan iniciar sesión y acceder a la funcionalidad de la aplicación.
 
 Puntos adicionales:

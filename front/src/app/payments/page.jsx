@@ -5,6 +5,7 @@ import axios from "axios";
 import LogOutButton from "../components/LogOutButton";
 import { format } from "date-fns";
 import formatDate from "../../../public/formatDate";
+import { CSVLink, CSVDownload } from "react-csv";
 
 export default function Payments() {
   const [payments, setPayments] = useState([]);
@@ -15,6 +16,12 @@ export default function Payments() {
   const [inputRecipient, setInputRecipient] = useState("");
   const [sortOption, setSortOption] = useState("masReciente");
   const router = useRouter();
+  const csvHeaders = [
+    { label: "Fecha", key: "date" },
+    { label: "Destinatario", key: "recipient" },
+    { label: "Tipo de Pago", key: "type" },
+    { label: "Monto", key: "amount" },
+  ];
 
   const indexOfLastPayment = currentPage * paymentsPerPage;
   const indexOfFirstPayment = indexOfLastPayment - paymentsPerPage;
@@ -191,10 +198,16 @@ export default function Payments() {
             </button>
           </div>
           <div>
-            <button
-              class="text-[#6366f1] font-semibold rounded-full border-2 bg-white w-40 h-10 hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300"
-            >
-              Exportar a CSV
+            <button class="text-[#6366f1] font-semibold rounded-full border-2 bg-white w-40 h-10 hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300">
+              <CSVLink
+                data={payments}
+                filename={"historialDePagos.csv"}
+                separator={";"}
+                headers={csvHeaders}
+              >
+                {" "}
+                Exportar a CSV
+              </CSVLink>
             </button>
           </div>
         </div>
