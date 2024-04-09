@@ -3,10 +3,10 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import LogOutButton from "../components/LogOutButton";
 import axios from "axios";
+import formatDate from "../../../public/formatDate";
 
 export default function RegisterPayment() {
   const [otroSelected, setOtroSelected] = useState(false);
-  const [otro, setOtro] = useState("");
   const [payment, setPayment] = useState({
     amount: null,
     date: "",
@@ -26,11 +26,9 @@ export default function RegisterPayment() {
       }));
     }
     if (name === "date" && value) {
-      const selectedDate = new Date(value);
-      const formattedDate = selectedDate.toISOString();
       setPayment((prevPayment) => ({
         ...prevPayment,
-        [name]: formattedDate,
+        [name]: formatDate(value),
       }));
     } else {
       setPayment((prevPayment) => ({

@@ -3,10 +3,25 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import LogOutButton from "../components/LogOutButton";
+import { format } from "date-fns";
+import formatDate from "../../../public/formatDate";
 
 export default function Payments() {
   const [payments, setPayments] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paymentsPerPage] = useState(8);
+  const [filterType, setFilterType] = useState("Todos");
+  const [filterDate, setFilterDate] = useState();
+  const [inputRecipient, setInputRecipient] = useState("");
+  const [sortOption, setSortOption] = useState("masReciente");
   const router = useRouter();
+
+  const indexOfLastPayment = currentPage * paymentsPerPage;
+  const indexOfFirstPayment = indexOfLastPayment - paymentsPerPage;
+  const currentPayments = payments.slice(
+    indexOfFirstPayment,
+    indexOfLastPayment
+  );
 
   const fetchPayments = async () => {
     try {
@@ -23,6 +38,91 @@ export default function Payments() {
     fetchPayments();
   }, []);
 
+  const handleFilterChange = (e) => {
+    const { value, name } = e.target;
+    if (name === "type") {
+      setFilterType(value);
+    }
+    if (name === "date") {
+      if (value === "") {
+        setFilterDate("");
+      } else {
+        setFilterDate(formatDate(value));
+      }
+    }
+    if (name === "recipient") {
+      setInputRecipient(value);
+    }
+    if (name === "sort") {
+      setSortOption(value);
+    }
+    setCurrentPage(1);
+  };
+
+  const renderPayments = () => {
+    let filteredPayments = currentPayments;
+
+    if (filterType !== "Todos") {
+      filteredPayments = currentPayments.filter(
+        (payment) => payment.type === filterType
+      );
+    }
+
+    if (filterDate) {
+      filteredPayments = filteredPayments.filter((payment) => {
+        return payment.date === filterDate;
+      });
+    }
+
+    if (inputRecipient) {
+      filteredPayments = filteredPayments.filter((payment) => {
+        return payment.recipient
+          .toLowerCase()
+          .includes(inputRecipient.toLowerCase());
+      });
+    }
+
+    if (sortOption === "mayorMonto") {
+      filteredPayments.sort(
+        (a, b) => parseFloat(b.amount) - parseFloat(a.amount)
+      );
+    } else if (sortOption === "menorMonto") {
+      filteredPayments.sort(
+        (a, b) => parseFloat(a.amount) - parseFloat(b.amount)
+      );
+    }
+
+    return filteredPayments.map((payment) => {
+      const formattedAmount = parseFloat(payment.amount).toLocaleString(
+        "es-AR",
+        {
+          minimumFractionDigits: 2,
+        }
+      );
+      return (
+        <div
+          key={payment.id}
+          class="flex flex-col justify-center border-b-2 border-[#6366f1] w-full h-20 px-6 "
+        >
+          <h1 class="text-xs">{payment.date}</h1>
+          <h1 class="font-bold">{payment.recipient}</h1>
+          <div class="flex justify-between">
+            <h1>{payment.type}</h1>
+            <h1 class="font-bold">${formattedAmount}</h1>
+          </div>
+        </div>
+      );
+    });
+  };
+
+  const handleClearFilters = () => {
+    setCurrentPage(1);
+    setFilterType("Todos");
+    setFilterDate("");
+    setInputRecipient("");
+    setSortOption("masReciente");
+  };
+
   return (
     <main class="flex flex-col items-center justify-center h-screen gap-4">
       <div class="w-2/5 flex items-center justify-between">
@@ -35,20 +135,36 @@ export default function Payments() {
         <div class="w-1/2 flex flex-col items-center gap-4 py-6">
           <div class="flex flex-col w-4/5 gap-1">
             <label class="text-white">Buscar por destinatario</label>
-            <input class=" rounded-md border-2 px-2 h-8"></input>
+            <input
+              name="recipient"
+              class=" rounded-md border-2 px-2 h-8"
+              onChange={handleFilterChange}
+              value={inputRecipient}
+            ></input>
           </div>
           <div class="flex flex-col w-4/5 gap-1">
             <label class="text-white">Ordenar por</label>
-            <select class="rounded-md border-2 px-2 h-8 text-sm text-[#6366f1]">
-              <option>Monto: de más bajo a más alto</option>
-              <option>Monto: de más alto a más bajo</option>
-              <option>Fecha: más reciente</option>
+            <select
+              name="sort"
+              class="rounded-md border-2 px-2 h-8 text-sm text-[#6366f1]"
+              onChange={handleFilterChange}
+              value={sortOption}
+            >
+              <option value="masReciente">Fecha: más reciente</option>
               <option>Fecha: más antigua</option>
+              <option value="mayorMonto">Monto: más alto</option>
+              <option value="menorMonto">Monto: más bajo</option>
             </select>
           </div>
           <div class="flex flex-col w-4/5 gap-1">
             <label class="text-white">Filtrar por Tipo de Pago</label>
-            <select class="rounded-md border-2 px-2 h-8 text-sm text-[#6366f1]">
+            <select
+              name="type"
+              class="rounded-md border-2 px-2 h-8 text-sm text-[#6366f1]"
+              onChange={handleFilterChange}
+              value={filterType}
+            >
+              <option value="Todos">Todos</option>
               <option value="Efectivo">Efectivo</option>
               <option value="Tarjeta de Débito">Tarjeta de Débito</option>
               <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
@@ -60,35 +176,55 @@ export default function Payments() {
           <div class="flex flex-col w-4/5 gap-1">
             <label class="text-white">Filtrar por Fecha</label>
             <input
+              name="date"
               type="date"
               class="rounded-md border-2 px-2 h-8 text-[#6366f1] text-sm"
+              onChange={handleFilterChange}
             ></input>
+          </div>
+          <div>
+            <button
+              onClick={handleClearFilters}
+              class="text-[#6366f1] font-semibold rounded-full border-2 bg-white w-40 h-10 hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300"
+            >
+              Eliminar filtros
+            </button>
+          </div>
+          <div>
+            <button
+              class="text-[#6366f1] font-semibold rounded-full border-2 bg-white w-40 h-10 hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300"
+            >
+              Exportar a CSV
+            </button>
           </div>
         </div>
         <div class="w-2/3 flex flex-col h-full justify-center gap-1 py-6">
           <label class="text-white">Resultados</label>
           <div class="w-11/12 h-full bg-white rounded-lg flex flex-col">
-            <div class="h-full">
-              <div class="flex flex-col justify-center border-b-2 border-[#6366f1] w-full h-20 px-6 ">
-                <h1 class="text-xs">03/05/2023</h1>
-                <h1 class="font-bold">Lucas Zibaitis</h1>
-                <div class="flex justify-between">
-                  <h1>Efectivo</h1>
-                  <h1 class="font-bold">$200.000,00</h1>
-                </div>
-              </div>
-            </div>
+            <div class="h-full">{renderPayments()}</div>
             <div class="flex h-12 items-center justify-around border-[#6366f1]">
               <img
                 src="./arrowLeft.svg"
                 width={40}
                 class="hover:scale-110 transition-all duration-300 cursor-pointer"
+                onClick={() =>
+                  setCurrentPage(
+                    currentPage > 1 ? currentPage - 1 : currentPage
+                  )
+                }
               />
-              <h1 class="text-lg font-bold text-[#6366f1]">1</h1>
+              <h1 class="text-lg font-bold text-[#6366f1]">{currentPage}</h1>
               <img
                 src="./arrowRight.svg"
                 width={40}
                 class="hover:scale-110 transition-all duration-300 cursor-pointer"
+                onClick={() =>
+                  setCurrentPage(
+                    currentPage < Math.ceil(payments.length / paymentsPerPage)
+                      ? currentPage + 1
+                      : currentPage
+                  )
+                }
               />
             </div>
           </div>
