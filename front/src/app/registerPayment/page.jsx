@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import LogOutButton from "../components/LogOutButton";
 import axios from "axios";
 import formatDate from "../../../public/formatDate";
+import validateForm from "./validateForm";
 
 export default function RegisterPayment() {
   const [otroSelected, setOtroSelected] = useState(false);
@@ -12,8 +13,23 @@ export default function RegisterPayment() {
     date: "",
     type: "",
     recipient: "",
-    userId: localStorage.getItem("userId"),
+    userId: "",
   });
+  const [errors, setErrors] = useState({
+    amount: null,
+    date: "",
+    type: "",
+    recipient: "",
+  });
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    setPayment((prevPayment) => ({
+      ...prevPayment,
+      userId: userId,
+    }));
+  }, []);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const router = useRouter();
 
   const handleInputChange = (e) => {
@@ -42,10 +58,18 @@ export default function RegisterPayment() {
         ...prevPayment,
         [name]: value,
       }));
+      setErrors(validateForm({ ...payment, [name]: value }));
     }
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormSubmitted(true);
+
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+
     try {
       const accessToken = localStorage.getItem("accessToken");
       const config = { headers: { Authorization: `Bearer ${accessToken}` } };
@@ -54,6 +78,7 @@ export default function RegisterPayment() {
         .then((response) => {
           console.log(response);
         });
+      setFormSubmitted(false);
     } catch (error) {
       console.log(error);
     }
@@ -70,7 +95,13 @@ export default function RegisterPayment() {
       <div class="flex flex-col items-center w-1/3 h-1/2 rounded-3xl bg-[#6366f1]">
         <form class="flex flex-col items-center justify-center gap-4 w-full h-full">
           <div class="flex flex-col w-1/2 gap-1">
-            <label class="text-white">Monto</label>
+            <div class="flex items-center justify-between">
+              <label class="text-white">Monto</label>
+              <p class="text-xs text-white font-semibold">
+                {formSubmitted ? errors.amount : null}
+              </p>
+            </div>
+
             <input
               name="amount"
               class=" text-[#6366f1] rounded-md  px-2 w-full h-8 outline-current"
