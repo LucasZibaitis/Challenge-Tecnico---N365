@@ -1,4 +1,4 @@
-export default function validateForm(form) {
+export default function validateRegisterForm(form) {
   const errors = {};
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const nameRegex = /^[A-Za-zñÑ]+$/;

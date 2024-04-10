@@ -1,8 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import validateForm from "./validateRegisterForm";
-import { useRouter } from "next/navigation";
+import validateRegisterForm from "./validateRegisterForm";
 
 export default function RegisterForm({ setRegisterClicked, registerClicked }) {
   const [userData, setUserData] = useState({
@@ -18,8 +17,7 @@ export default function RegisterForm({ setRegisterClicked, registerClicked }) {
     password: "",
   });
   const [hidePassword, setHidePassword] = useState(true);
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const router = useRouter();
+  const [backendError, setBackendError] = useState(null);
 
   const handleChange = (e) => {
     const { value, name } = e.target;
@@ -31,13 +29,21 @@ export default function RegisterForm({ setRegisterClicked, registerClicked }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formErrors = validateForm(userData);
+    const formErrors = validateRegisterForm(userData);
     if (Object.keys(formErrors).length === 0) {
       try {
         await axios.post("http://localhost:3001/postUser", userData);
         setRegisterClicked(false);
       } catch (error) {
-        console.log(error.response.data);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.error
+        ) {
+          setBackendError(error.response.data.error);
+        } else {
+          console.log(error);
+        }
       }
     } else {
       setErrors(formErrors);
@@ -78,6 +84,9 @@ export default function RegisterForm({ setRegisterClicked, registerClicked }) {
           {errors.mail ? (
             <p class="text-xs font-semibold text-white">{errors.mail}</p>
           ) : null}
+          {backendError && (
+            <p class="text-xs font-semibold text-white">{backendError}</p>
+          )}
           <input
             class="rounded-full h-12 w-full px-4 bg-[#c7d2fe]  outline-[#6366f1]"
             placeholder="Email"

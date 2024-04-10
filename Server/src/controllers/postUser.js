@@ -11,6 +11,11 @@ const postUser = async (req, res) => {
     });
     return res.status(200).send(newUser);
   } catch (error) {
+    if (error.name === "SequelizeUniqueConstraintError") {
+      return res
+        .status(400)
+        .json({ error: "Ya existe un usuario con este correo electrónico*" });
+    }
     return res.status(500).json({ error: error.message });
   }
 };

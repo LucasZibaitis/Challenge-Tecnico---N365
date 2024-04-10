@@ -6,7 +6,7 @@ const postLoggedUser = async (req, res) => {
   try {
     const user = await User.findOne({ where: { mail, password } });
     if (!user) {
-      return res.status(401).json({ error: "Credenciales inválidas" });
+      return res.status(401).json({ error: "Credenciales inválidas*" });
     }
     const accessToken = jwt.sign({ userId: user.id }, "secret", {
       expiresIn: "1h",
