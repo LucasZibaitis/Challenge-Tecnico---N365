@@ -4,23 +4,41 @@ import { useState, useEffect } from "react";
 import LogOutButton from "../components/LogOutButton";
 import axios from "axios";
 import formatDate from "../../../public/formatDate";
-import validateForm from "./validateForm";
+import validatePaymentForm from "./validatePaymentForm.js";
 
 export default function RegisterPayment() {
   const [otroSelected, setOtroSelected] = useState(false);
   const [payment, setPayment] = useState({
-    amount: null,
+    amount: "",
     date: "",
     type: "",
     recipient: "",
     userId: "",
   });
   const [errors, setErrors] = useState({
-    amount: null,
+    amount: "",
     date: "",
     type: "",
     recipient: "",
   });
+  const router = useRouter();
+
+  const resetForm = () => {
+    setPayment({
+      amount: "",
+      date: "",
+      type: "",
+      recipient: "",
+      userId: "",
+    });
+    setErrors({
+      amount: "",
+      date: "",
+      type: "",
+      recipient: "",
+    });
+    setOtroSelected(false);
+  };
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
@@ -29,8 +47,6 @@ export default function RegisterPayment() {
       userId: userId,
     }));
   }, []);
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const router = useRouter();
 
   const handleInputChange = (e) => {
     const { value, name } = e.target;
@@ -58,22 +74,29 @@ export default function RegisterPayment() {
         ...prevPayment,
         [name]: value,
       }));
-      setErrors(validateForm({ ...payment, [name]: value }));
     }
   };
 
   const handleSubmit = async (e) => {
-    try {
-      const accessToken = localStorage.getItem("accessToken");
-      const config = { headers: { Authorization: `Bearer ${accessToken}` } };
-      await axios
-        .post("http://localhost:3001/postPayment", payment, config)
-        .then((response) => {
-          console.log(response);
-        });
-      setFormSubmitted(false);
-    } catch (error) {
-      console.log(error);
+    e.preventDefault();
+    const formErrors = validatePaymentForm(payment);
+
+    if (Object.keys(formErrors).length === 0) {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+        const config = { headers: { Authorization: `Bearer ${accessToken}` } };
+        await axios
+          .post("http://localhost:3001/postPayment", payment, config)
+          .then((response) => {
+            console.log(response);
+            resetForm();
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      setErrors(formErrors);
+      return;
     }
   };
 
@@ -90,11 +113,10 @@ export default function RegisterPayment() {
           <div class="flex flex-col w-1/2 gap-1">
             <div class="flex items-center justify-between">
               <label class="text-white">Monto</label>
-              <p class="text-xs text-white font-semibold">
-                {formSubmitted ? errors.amount : null}
-              </p>
+              {errors.amount ? (
+                <p class="text-xs text-white font-semibold">{errors.amount}</p>
+              ) : null}
             </div>
-
             <input
               name="amount"
               class=" text-[#6366f1] rounded-md  px-2 w-full h-8 outline-current"
@@ -103,13 +125,19 @@ export default function RegisterPayment() {
             ></input>
           </div>
           <div class="flex flex-col w-1/2 gap-1">
-            <label class="text-white">Tipo de Pago</label>
+            <div class="flex items-center justify-between">
+              <label class="text-white">Tipo de Pago</label>
+              {errors.type ? (
+                <p class="text-xs text-white font-semibold">{errors.type}</p>
+              ) : null}
+            </div>
             <select
               class="rounded-md  px-2 w-full h-8 text-sm text-[#6366f1] outline-current"
               name="type"
               onChange={handleInputChange}
+              value={payment.type}
             >
-              <option value="initial" class="text-sm">
+              <option value="initial" defaultValue class="text-sm">
                 Seleccionar Tipo de Pago
               </option>
               <option value="Efectivo" class="text-sm">
@@ -141,15 +169,28 @@ export default function RegisterPayment() {
             ) : null}
           </div>
           <div class="flex flex-col w-1/2 gap-1">
-            <label class="text-white">Destinatario</label>
+            <div class="flex items-center justify-between">
+              <label class="text-white">Destinatario</label>
+              {errors.recipient ? (
+                <p class="text-xs text-white font-semibold text-right">
+                  {errors.recipient}
+                </p>
+              ) : null}
+            </div>
             <input
               name="recipient"
               class="text-[#6366f1]  rounded-md  px-2 w-full h-8 outline-current"
               onChange={handleInputChange}
+              value={payment.recipient}
             ></input>
           </div>
           <div class="flex flex-col w-1/2 gap-1">
-            <label class="text-white">Fecha</label>
+            <div class="flex items-center justify-between">
+              <label class="text-white">Fecha</label>
+              {errors.date ? (
+                <p class="text-xs text-white font-semibold">{errors.date}</p>
+              ) : null}
+            </div>
             <input
               type="date"
               name="date"
