@@ -63,13 +63,6 @@ export default function RegisterPayment() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setFormSubmitted(true);
-
-    if (Object.keys(errors).length > 0) {
-      return;
-    }
-
     try {
       const accessToken = localStorage.getItem("accessToken");
       const config = { headers: { Authorization: `Bearer ${accessToken}` } };
