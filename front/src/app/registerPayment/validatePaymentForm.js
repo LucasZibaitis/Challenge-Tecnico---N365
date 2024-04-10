@@ -1,6 +1,6 @@
 export default function validatePaymentForm(payment) {
   const errors = {};
-  const recipientRegex = /^[a-zA-ZñÑ\s]{1,50}$/;
+  const onlyLettersRegex = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{1,50}$/;
   if (!payment.amount) {
     errors.amount = "Ingrese un monto*";
   } else if (payment.amount.length > 8) {
@@ -10,12 +10,14 @@ export default function validatePaymentForm(payment) {
     errors.type = "Seleccione un tipo de pago*";
   } else if (payment.type === "initial") {
     errors.type = "Seleccione un tipo de pago*";
-  } else if (payment.type === "otro" && !payment.otherType) {
+  } else if (payment.type === "Otro") {
     errors.type = "Ingrese un tipo de pago*";
+  } else if (!onlyLettersRegex.test(payment.type)) {
+    errors.type = "El tipo de pago debe contener solo letras*";
   }
   if (!payment.recipient) {
     errors.recipient = "Ingrese un destinatario*";
-  } else if (!recipientRegex.test(payment.recipient)) {
+  } else if (!onlyLettersRegex.test(payment.recipient)) {
     errors.recipient = "El destinatario debe contener solo letras*";
   } else if (payment.recipient.length > 30) {
     errors.recipient = "El destinatario debe tener un máximo de 30 caracteres*";

@@ -11,7 +11,7 @@ export default function RegisterPayment() {
   const [payment, setPayment] = useState({
     amount: "",
     date: "",
-    type: "",
+    type: "initial",
     recipient: "",
     userId: "",
   });
@@ -22,13 +22,74 @@ export default function RegisterPayment() {
     recipient: "",
   });
   const [selectedDate, setSelectedDate] = useState("");
+  const [selectedOtroType, setSelectedOtroType] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    setPayment((prevPayment) => ({
+      ...prevPayment,
+      userId: userId,
+    }));
+  }, []);
+
+  const handleRecipientChange = (e) => {
+    const { value, name } = e.target;
+    setPayment((prevPayment) => ({
+      ...prevPayment,
+      recipient: value,
+    }));
+  };
+
+  const handleAmountChange = (e) => {
+    const { value, name } = e.target;
+    setPayment((prevPayment) => ({
+      ...prevPayment,
+      amount: value,
+    }));
+  };
+
+  const handleDateChange = (e) => {
+    const { value, name } = e.target;
+    setPayment((prevPayment) => ({
+      ...prevPayment,
+      date: formatDate(value),
+    }));
+    setSelectedDate(value);
+  };
+
+  const handleTypeChange = (e) => {
+    const { value, name } = e.target;
+    if (value === "Otro") {
+      setOtroSelected(true);
+      setPayment((prevPayment) => ({
+        ...prevPayment,
+        type: "Otro",
+      }));
+      return;
+    } else {
+      setOtroSelected(false);
+      setPayment((prevPayment) => ({
+        ...prevPayment,
+        type: value,
+      }));
+    }
+  };
+
+  const handleInputOtroTypeChange = (e) => {
+    const { value, name } = e.target;
+    setSelectedOtroType(value);
+    setPayment((prevPayment) => ({
+      ...prevPayment,
+      type: value,
+    }));
+  };
 
   const resetForm = () => {
     setPayment({
       amount: "",
       date: "",
-      type: "",
+      type: "initial",
       recipient: "",
       userId: "",
     });
@@ -42,52 +103,16 @@ export default function RegisterPayment() {
     setSelectedDate("");
   };
 
-  useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    setPayment((prevPayment) => ({
-      ...prevPayment,
-      userId: userId,
-    }));
-  }, []);
-
-  const handleInputChange = (e) => {
-    const { value, name } = e.target;
-    if (name === "type") {
-      if (
-        value !== "initial" &&
-        value !== "Tarjeta de Débito" &&
-        value !== "Tarjeta de Crédito" &&
-        value !== "Depósito" &&
-        value !== "Transferencia" &&
-        value !== "Efectivo"
-      ) {
-        setOtroSelected(true);
-      } else {
-        setOtroSelected(false);
-      }
-    }
-    if (name === "date" && value) {
-      setPayment((prevPayment) => ({
-        ...prevPayment,
-        [name]: formatDate(value),
-      }));
-      setSelectedDate(value);
-    } else {
-      setPayment((prevPayment) => ({
-        ...prevPayment,
-        [name]: value,
-      }));
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const formErrors = validatePaymentForm(payment);
 
     if (Object.keys(formErrors).length === 0) {
       try {
         const accessToken = localStorage.getItem("accessToken");
         const config = { headers: { Authorization: `Bearer ${accessToken}` } };
+
         await axios
           .post("http://localhost:3001/postPayment", payment, config)
           .then((response) => {
@@ -123,7 +148,7 @@ export default function RegisterPayment() {
             <input
               name="amount"
               class=" text-[#6366f1] rounded-md  px-2 w-full h-8 outline-current"
-              onChange={handleInputChange}
+              onChange={handleAmountChange}
               value={payment.amount}
             ></input>
           </div>
@@ -131,16 +156,18 @@ export default function RegisterPayment() {
             <div class="flex items-center justify-between">
               <label class="text-white">Tipo de Pago</label>
               {errors.type ? (
-                <p class="text-xs text-white font-semibold">{errors.type}</p>
+                <p class="text-xs text-white font-semibold text-right">
+                  {errors.type}
+                </p>
               ) : null}
             </div>
             <select
               class="rounded-md  px-2 w-full h-8 text-sm text-[#6366f1] outline-current"
               name="type"
-              onChange={handleInputChange}
-              value={payment.type}
+              onChange={handleTypeChange}
+              value={payment.type === "initial" ? payment.type : null}
             >
-              <option value="initial" defaultValue class="text-sm">
+              <option value="initial" selected class="text-sm">
                 Seleccionar Tipo de Pago
               </option>
               <option value="Efectivo" class="text-sm">
@@ -158,16 +185,16 @@ export default function RegisterPayment() {
               <option value="Depósito" class="text-sm">
                 Depósito
               </option>
-              <option value="otro" class="text-sm">
+              <option value="Otro" class="text-sm">
                 Otro
               </option>
             </select>
             {otroSelected ? (
               <input
-                name="type"
+                name="otroType"
                 class=" rounded-md  px-2 w-full h-8 outline-current text-[#6366f1]"
                 placeholder="Ingrese el tipo de pago"
-                onChange={handleInputChange}
+                onChange={handleInputOtroTypeChange}
               ></input>
             ) : null}
           </div>
@@ -183,7 +210,7 @@ export default function RegisterPayment() {
             <input
               name="recipient"
               class="text-[#6366f1]  rounded-md  px-2 w-full h-8 outline-current"
-              onChange={handleInputChange}
+              onChange={handleRecipientChange}
               value={payment.recipient}
             ></input>
           </div>
@@ -198,7 +225,7 @@ export default function RegisterPayment() {
               type="date"
               name="date"
               class="rounded-md px-2 w-full h-8 text-[#6366f1] text-sm outline-current"
-              onChange={handleInputChange}
+              onChange={handleDateChange}
               value={selectedDate}
             ></input>
           </div>
@@ -231,6 +258,14 @@ export default function RegisterPayment() {
           Historial de pagos
         </button>
       </div>
+      <button
+        onClick={() => {
+          console.log(selectedOtroType);
+          console.log(payment);
+        }}
+      >
+        test
+      </button>
     </main>
   );
 }
