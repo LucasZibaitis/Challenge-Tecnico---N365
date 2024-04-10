@@ -21,6 +21,7 @@ export default function RegisterPayment() {
     type: "",
     recipient: "",
   });
+  const [selectedDate, setSelectedDate] = useState("");
   const router = useRouter();
 
   const resetForm = () => {
@@ -38,6 +39,7 @@ export default function RegisterPayment() {
       recipient: "",
     });
     setOtroSelected(false);
+    setSelectedDate("");
   };
 
   useEffect(() => {
@@ -69,6 +71,7 @@ export default function RegisterPayment() {
         ...prevPayment,
         [name]: formatDate(value),
       }));
+      setSelectedDate(value);
     } else {
       setPayment((prevPayment) => ({
         ...prevPayment,
@@ -196,6 +199,7 @@ export default function RegisterPayment() {
               name="date"
               class="rounded-md px-2 w-full h-8 text-[#6366f1] text-sm outline-current"
               onChange={handleInputChange}
+              value={selectedDate}
             ></input>
           </div>
           <button

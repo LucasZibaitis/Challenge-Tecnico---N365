@@ -13,6 +13,7 @@ export default function Payments() {
   const [paymentsPerPage, setPaymentsPerPage] = useState(8);
   const [filterType, setFilterType] = useState("Todos");
   const [filterDate, setFilterDate] = useState();
+  const [selectedDate, setSelectedDate] = useState("");
   const [inputRecipient, setInputRecipient] = useState("");
   const [sortOption, setSortOption] = useState("masReciente");
   const router = useRouter();
@@ -63,7 +64,9 @@ export default function Payments() {
     if (name === "date") {
       if (value === "") {
         setFilterDate("");
+        setSelectedDate("");
       } else {
+        setSelectedDate(value);
         setFilterDate(formatDate(value));
       }
     }
@@ -167,6 +170,7 @@ export default function Payments() {
     setCurrentPage(1);
     setFilterType("Todos");
     setFilterDate("");
+    setSelectedDate("");
     setInputRecipient("");
     setSortOption("masReciente");
   };
@@ -227,6 +231,7 @@ export default function Payments() {
               name="date"
               type="date"
               class="rounded-md  px-2 h-8 text-[#6366f1] text-sm outline-current"
+              value={selectedDate}
               onChange={handleFilterChange}
             ></input>
           </div>
