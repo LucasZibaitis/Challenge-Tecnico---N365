@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import validateForm from "./validateRegisterForm";
+import { useRouter } from "next/navigation";
 
 export default function RegisterForm({ setRegisterClicked, registerClicked }) {
   const [userData, setUserData] = useState({
@@ -9,7 +11,15 @@ export default function RegisterForm({ setRegisterClicked, registerClicked }) {
     mail: "",
     password: "",
   });
+  const [errors, setErrors] = useState({
+    name: "",
+    lastName: "",
+    mail: "",
+    password: "",
+  });
   const [hidePassword, setHidePassword] = useState(true);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const router = useRouter();
 
   const handleChange = (e) => {
     const { value, name } = e.target;
@@ -20,61 +30,87 @@ export default function RegisterForm({ setRegisterClicked, registerClicked }) {
   };
 
   const handleSubmit = async (e) => {
-    try {
-      await axios
-        .post("http://localhost:3001/postUser", userData)
-        .then((response) => console.log(response));
-    } catch (error) {
-      console.log(error.response.data);
+    e.preventDefault();
+    const formErrors = validateForm(userData);
+    if (Object.keys(formErrors).length === 0) {
+      try {
+        await axios.post("http://localhost:3001/postUser", userData);
+        setRegisterClicked(false);
+      } catch (error) {
+        console.log(error.response.data);
+      }
+    } else {
+      setErrors(formErrors);
+      return;
     }
   };
 
   return (
-    <div class="w-1/4 h-3/5 border bg-[#6366f1] rounded-3xl flex flex-col items-center pt-10">
-      <div class="flex flex-col items-center gap-2 py-8">
+    <div class="w-1/4 h-3/5 border bg-[#6366f1] rounded-3xl flex flex-col gap- items-center justify-center">
+      <div class="flex flex-col items-center gap-2 py-2">
         <h1 class="text-5xl text-white font-semibold">N365</h1>
         <h2 class="text-2xl text-white">Challenge Técnico </h2>
       </div>
       <form class="grid grid-cols-2 gap-4 w-3/4 pt-4">
-        <input
-          class="rounded-full h-12 px-4 bg-[#c7d2fe] outline-[#6366f1]"
-          placeholder="Nombre"
-          name="name"
-          onChange={handleChange}
-        ></input>
-        <input
-          class="rounded-full h-12 px-4 bg-[#c7d2fe] outline-[#6366f1]"
-          placeholder="Apellido"
-          onChange={handleChange}
-          name="lastName"
-        ></input>
-        <input
-          class="rounded-full h-12 px-4 bg-[#c7d2fe] col-span-2 outline-[#6366f1]"
-          placeholder="Email"
-          name="mail"
-          onChange={handleChange}
-        ></input>
-        <div className="flex justify-between gap-4 col-span-2">
+        <div class="flex flex-col items-end justify-end gap-1">
+          {errors.name ? (
+            <p class="text-xs text-white font-semibold">{errors.name}</p>
+          ) : null}
           <input
             class="rounded-full h-12 w-full px-4 bg-[#c7d2fe] outline-[#6366f1]"
-            placeholder="Contraseña"
-            type={hidePassword ? "password" : null}
+            placeholder="Nombre"
+            name="name"
             onChange={handleChange}
-            name="password"
           ></input>
-          <button
-            class="h-12 w-1/5"
-            onClick={(e) => {
-              e.preventDefault();
-              setHidePassword(!hidePassword);
-            }}
-          >
-            {hidePassword ? (
-              <img src="./eyeclosed.svg" width={35} />
-            ) : (
-              <img src="./eyeopened.svg" width={35} />
-            )}
-          </button>
+        </div>
+        <div class="flex flex-col items-end justify-end gap-1">
+          {errors.lastName ? (
+            <p class="text-xs font-semibold text-white">{errors.lastName}</p>
+          ) : null}
+          <input
+            class="rounded-full h-12 w-full px-4 bg-[#c7d2fe] outline-[#6366f1]"
+            placeholder="Apellido"
+            onChange={handleChange}
+            name="lastName"
+          ></input>
+        </div>
+        <div class="flex flex-col items-end gap-1 col-span-2">
+          {errors.mail ? (
+            <p class="text-xs font-semibold text-white">{errors.mail}</p>
+          ) : null}
+          <input
+            class="rounded-full h-12 w-full px-4 bg-[#c7d2fe]  outline-[#6366f1]"
+            placeholder="Email"
+            name="mail"
+            onChange={handleChange}
+          ></input>
+        </div>
+        <div class="flex items-end flex-col gap-1 col-span-2">
+          {errors.password ? (
+            <p class="text-xs font-semibold text-white">{errors.password}</p>
+          ) : null}
+          <div class="flex justify-between gap-4 w-full">
+            <input
+              class="rounded-full h-12 w-full px-4 bg-[#c7d2fe] outline-[#6366f1]"
+              placeholder="Contraseña"
+              type={hidePassword ? "password" : null}
+              onChange={handleChange}
+              name="password"
+            ></input>
+            <button
+              class="h-12 w-1/5"
+              onClick={(e) => {
+                e.preventDefault();
+                setHidePassword(!hidePassword);
+              }}
+            >
+              {hidePassword ? (
+                <img src="./eyeclosed.svg" width={35} />
+              ) : (
+                <img src="./eyeopened.svg" width={35} />
+              )}
+            </button>
+          </div>
         </div>
         <button
           onClick={handleSubmit}
