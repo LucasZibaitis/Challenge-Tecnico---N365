@@ -151,7 +151,7 @@ export default function Payments() {
               onClick={() => {
                 deletePayment(payment.id);
               }}
-              class="text-xs text-red-500 font-bold cursor-pointer"
+              class="text-xs text-red-500 font-bold cursor-pointer hover:scale-125 transition-all duration-300"
             >
               X
             </h1>
