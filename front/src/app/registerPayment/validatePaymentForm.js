@@ -1,7 +1,7 @@
 export default function validatePaymentForm(payment) {
   const errors = {};
   const onlyLettersRegex = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{1,50}$/;
-  const onlyNumbersRegex = /^\d*\.?\d*$/;
+  const onlyNumbersRegex = /^-?\d*[\.,]?\d*$/;
 
   if (!payment.amount) {
     errors.amount = "Ingrese un monto*";

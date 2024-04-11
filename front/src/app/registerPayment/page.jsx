@@ -43,9 +43,14 @@ export default function RegisterPayment() {
 
   const handleAmountChange = (e) => {
     const { value, name } = e.target;
+    const unformattedValue = value.replace(/\./g, "");
+    const formattedValue = unformattedValue.replace(
+      /\B(?=(\d{3})+(?!\d))/g,
+      "."
+    );
     setPayment((prevPayment) => ({
       ...prevPayment,
-      amount: value,
+      amount: formattedValue,
     }));
   };
 
@@ -106,6 +111,9 @@ export default function RegisterPayment() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let amountToSend = payment.amount.replace(/\./g, "").replace(/^0+/, "");
+    amountToSend = amountToSend.replace(/,/g, ".");
+
     const formErrors = validatePaymentForm(payment);
 
     if (Object.keys(formErrors).length === 0) {
@@ -114,7 +122,11 @@ export default function RegisterPayment() {
         const config = { headers: { Authorization: `Bearer ${accessToken}` } };
 
         await axios
-          .post("http://localhost:3001/postPayment", payment, config)
+          .post(
+            "http://localhost:3001/postPayment",
+            { ...payment, amount: amountToSend },
+            config
+          )
           .then((response) => {
             console.log(response);
             resetForm();
@@ -138,16 +150,19 @@ export default function RegisterPayment() {
       </div>
       <div class="flex flex-col items-center w-1/3 h-1/2 rounded-3xl bg-[#6366f1]">
         <form class="flex flex-col items-center justify-center gap-4 w-full h-full">
-          <div class="flex flex-col w-1/2 gap-1">
+          <div class="flex flex-col w-1/2 gap-1 relative">
             <div class="flex items-center justify-between">
               <label class="text-white">Monto</label>
               {errors.amount ? (
                 <p class="text-xs text-white font-semibold">{errors.amount}</p>
               ) : null}
             </div>
+            <div class="absolute inset-y-11 left-0 flex items-center pl-3">
+              <span class="text-[#6366f1]">$</span>
+            </div>
             <input
               name="amount"
-              class=" text-[#6366f1] rounded-md  px-2 w-full h-8 outline-current"
+              class="text-[#6366f1] rounded-md px-2 w-full h-8 outline-current pl-7"
               onChange={handleAmountChange}
               value={payment.amount}
             ></input>
@@ -258,14 +273,6 @@ export default function RegisterPayment() {
           Historial de pagos
         </button>
       </div>
-      <button
-        onClick={() => {
-          console.log(selectedOtroType);
-          console.log(payment);
-        }}
-      >
-        test
-      </button>
     </main>
   );
 }
