@@ -24,6 +24,7 @@ export default function RegisterPayment() {
   });
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedOtroType, setSelectedOtroType] = useState("");
+  const [completed, setCompleted] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -129,8 +130,9 @@ export default function RegisterPayment() {
             config
           )
           .then((response) => {
-            console.log(response);
             resetForm();
+            setCompleted(true);
+            console.log(response);
           });
       } catch (error) {
         console.log(error);
@@ -151,113 +153,129 @@ export default function RegisterPayment() {
           <LogOutButton />
         </div>
         <div class="flex flex-col items-center md:w-2/4 lg:w-1/3 md:h-3/5 lg:h-1/2 rounded-3xl bg-[#6366f1]">
-          <form class="flex flex-col items-center justify-center gap-4 w-full h-full">
-            <div class="flex flex-col w-1/2 gap-1 relative">
-              <div class="flex items-center justify-between">
-                <label class="text-white">Monto</label>
-                {errors.amount ? (
-                  <p class="text-xs text-white font-semibold">
-                    {errors.amount}
-                  </p>
-                ) : null}
-              </div>
-              <div class="absolute inset-y-11 left-0 flex items-center pl-3">
-                <span class="text-[#6366f1]">$</span>
-              </div>
-              <input
-                name="amount"
-                class="text-[#6366f1] rounded-md px-2 w-full h-8 outline-current pl-7"
-                onChange={handleAmountChange}
-                value={payment.amount}
-              ></input>
-            </div>
-            <div class="flex flex-col w-1/2 gap-1">
-              <div class="flex items-center justify-between">
-                <label class="text-white">Tipo de Pago</label>
-                {errors.type ? (
-                  <p class="text-xs text-white font-semibold text-right">
-                    {errors.type}
-                  </p>
-                ) : null}
-              </div>
-              <select
-                class="rounded-md  px-2 w-full h-8 text-sm text-[#6366f1] outline-current"
-                name="type"
-                onChange={handleTypeChange}
-                value={payment.type === "initial" ? payment.type : null}
+          {completed ? (
+            <div class="w-full h-full flex flex-col items-center justify-center">
+              <h1 class="text-2xl text-white">Pago registrado exitosamente.</h1>
+              <button
+                onClick={() => {
+                  setCompleted(false);
+                }}
+                class="text-[#6366f1] font-semibold mt-10 rounded-full bg-white w-1/3 h-10 hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300"
               >
-                <option value="initial" selected class="text-sm">
-                  Seleccionar Tipo de Pago
-                </option>
-                <option value="Efectivo" class="text-sm">
-                  Efectivo
-                </option>
-                <option value="Tarjeta de Débito" class="text-sm">
-                  Tarjeta de Débito
-                </option>
-                <option value="Tarjeta de Crédito" class="text-sm">
-                  Tarjeta de Crédito
-                </option>
-                <option value="Transferencia" class="text-sm">
-                  Transferencia
-                </option>
-                <option value="Depósito" class="text-sm">
-                  Depósito
-                </option>
-                <option value="Otro" class="text-sm">
-                  Otro
-                </option>
-              </select>
-              {otroSelected ? (
+                Registrar otro pago
+              </button>
+            </div>
+          ) : (
+            <form class="flex flex-col items-center justify-center gap-4 w-full h-full">
+              <div class="flex flex-col w-1/2 gap-1 relative">
+                <div class="flex items-center justify-between">
+                  <label class="text-white">Monto</label>
+                  {errors.amount ? (
+                    <p class="text-xs text-white font-semibold">
+                      {errors.amount}
+                    </p>
+                  ) : null}
+                </div>
+                <div class="absolute inset-y-11 left-0 flex items-center pl-3">
+                  <span class="text-[#6366f1]">$</span>
+                </div>
                 <input
-                  name="otroType"
-                  class=" rounded-md  px-2 w-full h-8 outline-current text-[#6366f1]"
-                  placeholder="Ingrese el tipo de pago"
-                  onChange={handleInputOtroTypeChange}
+                  name="amount"
+                  class="text-[#6366f1] rounded-md px-2 w-full h-8 outline-current pl-7"
+                  onChange={handleAmountChange}
+                  value={payment.amount}
                 ></input>
-              ) : null}
-            </div>
-            <div class="flex flex-col w-1/2 gap-1">
-              <div class="flex items-center justify-between">
-                <label class="text-white">Destinatario</label>
-                {errors.recipient ? (
-                  <p class="text-xs text-white font-semibold text-right">
-                    {errors.recipient}
-                  </p>
+              </div>
+              <div class="flex flex-col w-1/2 gap-1">
+                <div class="flex items-center justify-between">
+                  <label class="text-white">Tipo de Pago</label>
+                  {errors.type ? (
+                    <p class="text-xs text-white font-semibold text-right">
+                      {errors.type}
+                    </p>
+                  ) : null}
+                </div>
+                <select
+                  class="rounded-md  px-2 w-full h-8 text-sm text-[#6366f1] outline-current"
+                  name="type"
+                  onChange={handleTypeChange}
+                  value={payment.type === "initial" ? payment.type : null}
+                >
+                  <option value="initial" selected class="text-sm">
+                    Seleccionar Tipo de Pago
+                  </option>
+                  <option value="Efectivo" class="text-sm">
+                    Efectivo
+                  </option>
+                  <option value="Tarjeta de Débito" class="text-sm">
+                    Tarjeta de Débito
+                  </option>
+                  <option value="Tarjeta de Crédito" class="text-sm">
+                    Tarjeta de Crédito
+                  </option>
+                  <option value="Transferencia" class="text-sm">
+                    Transferencia
+                  </option>
+                  <option value="Depósito" class="text-sm">
+                    Depósito
+                  </option>
+                  <option value="Otro" class="text-sm">
+                    Otro
+                  </option>
+                </select>
+                {otroSelected ? (
+                  <input
+                    name="otroType"
+                    class=" rounded-md  px-2 w-full h-8 outline-current text-[#6366f1]"
+                    placeholder="Ingrese el tipo de pago"
+                    onChange={handleInputOtroTypeChange}
+                  ></input>
                 ) : null}
               </div>
-              <input
-                name="recipient"
-                class="text-[#6366f1]  rounded-md  px-2 w-full h-8 outline-current"
-                onChange={handleRecipientChange}
-                value={payment.recipient}
-              ></input>
-            </div>
-            <div class="flex flex-col w-1/2 gap-1">
-              <div class="flex items-center justify-between">
-                <label class="text-white">Fecha</label>
-                {errors.date ? (
-                  <p class="text-xs text-white font-semibold">{errors.date}</p>
-                ) : null}
+              <div class="flex flex-col w-1/2 gap-1">
+                <div class="flex items-center justify-between">
+                  <label class="text-white">Destinatario</label>
+                  {errors.recipient ? (
+                    <p class="text-xs text-white font-semibold text-right">
+                      {errors.recipient}
+                    </p>
+                  ) : null}
+                </div>
+                <input
+                  name="recipient"
+                  class="text-[#6366f1]  rounded-md  px-2 w-full h-8 outline-current"
+                  onChange={handleRecipientChange}
+                  value={payment.recipient}
+                ></input>
               </div>
-              <input
-                type="date"
-                name="date"
-                class="rounded-md px-2 w-full h-8 text-[#6366f1] text-sm outline-current"
-                onChange={handleDateChange}
-                value={selectedDate}
-              ></input>
-            </div>
-            <button
-              onClick={(e) => {
-                handleSubmit(e);
-              }}
-              type="submit"
-              class="text-[#6366f1] font-semibold mt-10 rounded-full bg-white w-1/3 h-10 hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300"
-            >
-              Registrar Pago
-            </button>
-          </form>
+              <div class="flex flex-col w-1/2 gap-1">
+                <div class="flex items-center justify-between">
+                  <label class="text-white">Fecha</label>
+                  {errors.date ? (
+                    <p class="text-xs text-white font-semibold">
+                      {errors.date}
+                    </p>
+                  ) : null}
+                </div>
+                <input
+                  type="date"
+                  name="date"
+                  class="rounded-md px-2 w-full h-8 text-[#6366f1] text-sm outline-current"
+                  onChange={handleDateChange}
+                  value={selectedDate}
+                ></input>
+              </div>
+              <button
+                onClick={(e) => {
+                  handleSubmit(e);
+                }}
+                type="submit"
+                class="text-[#6366f1] font-semibold mt-10 rounded-full bg-white w-1/3 h-10 hover:bg-[#6366f1] hover:border hover:text-white hover:font-bold transition-all duration-300"
+              >
+                Registrar Pago
+              </button>
+            </form>
+          )}
         </div>
         <div class="w-1/3 flex items-center justify-between gap-4">
           <button

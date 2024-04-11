@@ -24,6 +24,7 @@ export default function Payments() {
     { label: "Tipo de Pago", key: "type" },
     { label: "Monto", key: "amount" },
   ];
+  const [paymentToDelete, setPaymentToDelete] = useState();
 
   const indexOfLastPayment = currentPage * paymentsPerPage;
   const indexOfFirstPayment = indexOfLastPayment - paymentsPerPage;
@@ -154,21 +155,49 @@ export default function Payments() {
           minimumFractionDigits: 2,
         }
       );
-      return (
+      return paymentToDelete === payment.id ? (
+        <div
+          key={payment.id}
+          class="flex flex-col gap-2 items-center justify-center border-b-2 border-[#6366f1] w-full h-20 px-6 "
+        >
+          <h1 class="text-[#6366f1] font-semibold">
+            {" "}
+            ¿Seguro que quieres eliminar este pago?
+          </h1>
+          <div class="flex items-center justify-center gap-10 w-full">
+            <button
+              onClick={() => {
+                deletePayment(payment.id);
+              }}
+              class="border-2 border-[#6366f1] text-[#6366f1] rounded-full w-1/5 hover:font-bold hover:bg-[#6366f1] hover:text-white transition-all duration-300"
+            >
+              Si
+            </button>
+            <button
+              onClick={() => {
+                setPaymentToDelete("");
+              }}
+              class="border-2 border-[#6366f1] text-[#6366f1] rounded-full  w-1/5 hover:font-bold hover:bg-[#6366f1] hover:text-white transition-all duration-300"
+            >
+              No
+            </button>
+          </div>
+        </div>
+      ) : (
         <div
           key={payment.id}
           class="flex flex-col justify-center border-b-2 border-[#6366f1] w-full h-20 px-6 "
         >
           <div class="flex justify-between">
             <h1 class="text-xs">{payment.date}</h1>
-            <h1
+            <img
+              src="./trashIcon.svg"
+              width={20}
               onClick={() => {
-                deletePayment(payment.id);
+                setPaymentToDelete(payment.id);
               }}
-              class="text-xs text-red-500 font-bold cursor-pointer hover:scale-125 transition-all duration-300"
-            >
-              X
-            </h1>
+              class="cursor-pointer hover:scale-110 transition-all duration-300"
+            />
           </div>
           <h1 class="font-bold">{payment.recipient}</h1>
           <div class="flex justify-between">
