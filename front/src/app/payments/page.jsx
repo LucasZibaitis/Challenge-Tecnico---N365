@@ -191,8 +191,8 @@ export default function Payments() {
           <div class="flex justify-between">
             <h1 class="text-xs">{payment.date}</h1>
             <img
-              src="./trashIcon.svg"
-              width={20}
+              src="./crossIcon.svg"
+              width={15}
               onClick={() => {
                 setPaymentToDelete(payment.id);
               }}
