@@ -28,8 +28,6 @@ export default function Payments() {
   const indexOfLastPayment = currentPage * paymentsPerPage;
   const indexOfFirstPayment = indexOfLastPayment - paymentsPerPage;
 
-  console.log(indexOfLastPayment);
-
   const fetchPayments = async () => {
     try {
       const accessToken = localStorage.getItem("accessToken");

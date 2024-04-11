@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 const sequelize = new Sequelize(
-  "postgres://postgres:sarachaga4632@localhost/theagency"
+  "postgres://theagency:cnFsLr4qMxKHebIkSaIue3AjQhjtmHya@dpg-coc4lg63e1ms73aukncg-a/theagency"
 );
 
 const basename = path.basename(__filename);

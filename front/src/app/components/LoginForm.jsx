@@ -60,7 +60,7 @@ export default function LoginForm({ setRegisterClicked, registerClicked }) {
   };
 
   return (
-    <div class="md:w-1/3 lg:w-1/4 lg:h-3/5 border bg-[#6366f1] rounded-3xl flex flex-col items-center py-10 gap-10">
+    <div class="lg:w-1/4 lg:h-3/5 border bg-[#6366f1] rounded-3xl flex flex-col items-center py-10 gap-10">
       <div class="flex flex-col items-center gap-2 py-8">
         <h1 class="text-5xl text-white font-semibold">N365</h1>
         <h2 class="text-2xl text-white">Challenge Técnico </h2>
