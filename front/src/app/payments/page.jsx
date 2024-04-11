@@ -6,6 +6,7 @@ import LogOutButton from "../components/LogOutButton";
 import { format } from "date-fns";
 import formatDate from "../../../public/formatDate";
 import { CSVLink, CSVDownload } from "react-csv";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 export default function Payments() {
   const [payments, setPayments] = useState([]);
@@ -176,157 +177,163 @@ export default function Payments() {
   };
 
   return (
-    <main class="flex flex-col items-center justify-center h-screen gap-4">
-      <div class="w-2/5 flex items-center justify-between">
-        <h1 class="text-5xl text-[#6366f1] font-semibold tracking-tighter">
-          Historial de Pagos
-        </h1>
-        <LogOutButton />
-      </div>
-      <div class="flex w-2/5 h-5/6 rounded-3xl bg-[#6366f1]">
-        <div class="w-1/2 flex flex-col items-center gap-4 py-6">
-          <div class="flex flex-col w-4/5 gap-1">
-            <label class="text-white">Buscar por destinatario</label>
-            <input
-              name="recipient"
-              class=" rounded-md  px-2 h-8 text-[#6366f1] outline-current"
-              onChange={handleFilterChange}
-              value={inputRecipient}
-            ></input>
-          </div>
-          <div class="flex flex-col w-4/5 gap-1">
-            <label class="text-white">Ordenar por</label>
-            <select
-              name="sort"
-              class="rounded-md  px-2 h-8 text-sm text-[#6366f1] outline-current"
-              onChange={handleFilterChange}
-              value={sortOption}
-            >
-              <option value="masReciente">Fecha: más reciente</option>
-              <option value="masAntigua">Fecha: más antigua</option>
-              <option value="mayorMonto">Monto: más alto</option>
-              <option value="menorMonto">Monto: más bajo</option>
-            </select>
-          </div>
-          <div class="flex flex-col w-4/5 gap-1">
-            <label class="text-white">Filtrar por Tipo de Pago</label>
-            <select
-              name="type"
-              class="rounded-md px-2 h-8 text-sm text-[#6366f1] outline-current"
-              onChange={handleFilterChange}
-              value={filterType}
-            >
-              <option value="Todos">Todos</option>
-              <option value="Efectivo">Efectivo</option>
-              <option value="Tarjeta de Débito">Tarjeta de Débito</option>
-              <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
-              <option value="Transferencia">Transferencia</option>
-              <option value="Depósito">Depósito</option>
-              <option value="otro">Otro</option>
-            </select>
-          </div>
-          <div class="flex flex-col w-4/5 gap-1">
-            <label class="text-white">Filtrar por Fecha</label>
-            <input
-              name="date"
-              type="date"
-              class="rounded-md  px-2 h-8 text-[#6366f1] text-sm outline-current"
-              value={selectedDate}
-              onChange={handleFilterChange}
-            ></input>
-          </div>
-          <div class="flex flex-col gap-2 w-4/5 h-full justify-between">
-            <div>
-              <button
-                onClick={handleClearFilters}
-                class="text-[white] border mt-4 font-semibold rounded-full  w-40 h-10 hover:bg-[white] hover:border hover:text-[#6366f1] hover:font-bold transition-all duration-300"
-              >
-                Eliminar filtros
-              </button>
-            </div>
-            <div>
-              <button class="text-[white] border mt-4 font-semibold rounded-full  w-40 h-10 hover:bg-[white] hover:border hover:text-[#6366f1] hover:font-bold transition-all duration-300">
-                <CSVLink
-                  data={payments}
-                  filename={"historialDePagos.csv"}
-                  separator={";"}
-                  headers={csvHeaders}
-                >
-                  {" "}
-                  Exportar a CSV
-                </CSVLink>
-              </button>
-            </div>
-          </div>
+    <ProtectedRoute>
+      <main class="flex flex-col items-center justify-center h-screen gap-4">
+        <div class="w-2/5 flex items-center justify-between">
+          <h1 class="text-5xl text-[#6366f1] font-semibold tracking-tighter">
+            Historial de Pagos
+          </h1>
+          <LogOutButton />
         </div>
-        <div class="w-2/3 flex flex-col h-full justify-center gap-1 py-6">
-          <label class="text-white">Resultados</label>
-          <div class="w-11/12 h-full bg-white rounded-lg flex flex-col">
-            <div class="h-full">
-              {totalPayments ? (
-                renderPayments()
-              ) : (
-                <div class="h-full flex items-center justify-center">
-                  <h1 class="text-lg text-[#6366f1]">
-                    No se encontraron pagos.
+        <div class="flex w-2/5 h-5/6 rounded-3xl bg-[#6366f1]">
+          <div class="w-1/2 flex flex-col items-center gap-4 py-6">
+            <div class="flex flex-col w-4/5 gap-1">
+              <label class="text-white">Buscar por destinatario</label>
+              <input
+                name="recipient"
+                class=" rounded-md  px-2 h-8 text-[#6366f1] outline-current"
+                onChange={handleFilterChange}
+                value={inputRecipient}
+              ></input>
+            </div>
+            <div class="flex flex-col w-4/5 gap-1">
+              <label class="text-white">Ordenar por</label>
+              <select
+                name="sort"
+                class="rounded-md  px-2 h-8 text-sm text-[#6366f1] outline-current"
+                onChange={handleFilterChange}
+                value={sortOption}
+              >
+                <option value="masReciente">Fecha: más reciente</option>
+                <option value="masAntigua">Fecha: más antigua</option>
+                <option value="mayorMonto">Monto: más alto</option>
+                <option value="menorMonto">Monto: más bajo</option>
+              </select>
+            </div>
+            <div class="flex flex-col w-4/5 gap-1">
+              <label class="text-white">Filtrar por Tipo de Pago</label>
+              <select
+                name="type"
+                class="rounded-md px-2 h-8 text-sm text-[#6366f1] outline-current"
+                onChange={handleFilterChange}
+                value={filterType}
+              >
+                <option value="Todos">Todos</option>
+                <option value="Efectivo">Efectivo</option>
+                <option value="Tarjeta de Débito">Tarjeta de Débito</option>
+                <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
+                <option value="Transferencia">Transferencia</option>
+                <option value="Depósito">Depósito</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+            <div class="flex flex-col w-4/5 gap-1">
+              <label class="text-white">Filtrar por Fecha</label>
+              <input
+                name="date"
+                type="date"
+                class="rounded-md  px-2 h-8 text-[#6366f1] text-sm outline-current"
+                value={selectedDate}
+                onChange={handleFilterChange}
+              ></input>
+            </div>
+            <div class="flex flex-col gap-2 w-4/5 h-full justify-between">
+              <div>
+                <button
+                  onClick={handleClearFilters}
+                  class="text-[white] border mt-4 font-semibold rounded-full  w-40 h-10 hover:bg-[white] hover:border hover:text-[#6366f1] hover:font-bold transition-all duration-300"
+                >
+                  Eliminar filtros
+                </button>
+              </div>
+              <div>
+                <button class="text-[white] border mt-4 font-semibold rounded-full  w-40 h-10 hover:bg-[white] hover:border hover:text-[#6366f1] hover:font-bold transition-all duration-300">
+                  <CSVLink
+                    data={payments}
+                    filename={"historialDePagos.csv"}
+                    separator={";"}
+                    headers={csvHeaders}
+                  >
+                    {" "}
+                    Exportar a CSV
+                  </CSVLink>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="w-2/3 flex flex-col h-full justify-center gap-1 py-6">
+            <label class="text-white">Resultados</label>
+            <div class="w-11/12 h-full bg-white rounded-lg flex flex-col">
+              <div class="h-full">
+                {totalPayments ? (
+                  renderPayments()
+                ) : (
+                  <div class="h-full flex items-center justify-center">
+                    <h1 class="text-lg text-[#6366f1]">
+                      No se encontraron pagos.
+                    </h1>
+                  </div>
+                )}
+              </div>
+              <div class="flex h-12 items-center justify-around border-[#6366f1]">
+                <div class="flex items-center justify-center w-full">
+                  {currentPage === 1 ? null : (
+                    <img
+                      src="./arrowLeft.svg"
+                      width={40}
+                      class="hover:scale-110 transition-all duration-300 cursor-pointer"
+                      onClick={() =>
+                        setCurrentPage(
+                          currentPage > 1 ? currentPage - 1 : currentPage
+                        )
+                      }
+                    />
+                  )}
+                </div>
+                <div class="flex items-center justify-center w-full">
+                  <h1 class="text-lg font-bold text-[#6366f1]">
+                    {currentPage}
                   </h1>
                 </div>
-              )}
-            </div>
-            <div class="flex h-12 items-center justify-around border-[#6366f1]">
-              <div class="flex items-center justify-center w-full">
-                {currentPage === 1 ? null : (
-                  <img
-                    src="./arrowLeft.svg"
-                    width={40}
-                    class="hover:scale-110 transition-all duration-300 cursor-pointer"
-                    onClick={() =>
-                      setCurrentPage(
-                        currentPage > 1 ? currentPage - 1 : currentPage
-                      )
-                    }
-                  />
-                )}
-              </div>
-              <div class="flex items-center justify-center w-full">
-                <h1 class="text-lg font-bold text-[#6366f1]">{currentPage}</h1>
-              </div>
-              <div class="flex items-center justify-center w-full">
-                {totalPages > 1 && currentPage < totalPages && (
-                  <img
-                    src="./arrowRight.svg"
-                    width={40}
-                    class="hover:scale-110 transition-all duration-300 cursor-pointer"
-                    onClick={() =>
-                      setCurrentPage(
-                        currentPage < totalPages ? currentPage + 1 : currentPage
-                      )
-                    }
-                  />
-                )}
+                <div class="flex items-center justify-center w-full">
+                  {totalPages > 1 && currentPage < totalPages && (
+                    <img
+                      src="./arrowRight.svg"
+                      width={40}
+                      class="hover:scale-110 transition-all duration-300 cursor-pointer"
+                      onClick={() =>
+                        setCurrentPage(
+                          currentPage < totalPages
+                            ? currentPage + 1
+                            : currentPage
+                        )
+                      }
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="w-2/5 flex items-center justify-between gap-4">
-        <button
-          class="text-white rounded-full w-48 h-10 font-semibold bg-[#6366f1] hover:bg-white hover:text-[#6366f1] hover:border-2 hover:border-[#6366f1] transition-all duration-300"
-          onClick={() => {
-            router.push("/home");
-          }}
-        >
-          Volver al inicio
-        </button>
-        <button
-          class="text-white rounded-full w-48 h-10 font-semibold bg-[#6366f1] hover:bg-white hover:text-[#6366f1] hover:border-2 hover:border-[#6366f1] transition-all duration-300"
-          onClick={() => {
-            router.push("/registerPayment");
-          }}
-        >
-          Registrar Pagos
-        </button>
-      </div>
-    </main>
+        <div class="w-2/5 flex items-center justify-between gap-4">
+          <button
+            class="text-white rounded-full w-48 h-10 font-semibold bg-[#6366f1] hover:bg-white hover:text-[#6366f1] hover:border-2 hover:border-[#6366f1] transition-all duration-300"
+            onClick={() => {
+              router.push("/home");
+            }}
+          >
+            Volver al inicio
+          </button>
+          <button
+            class="text-white rounded-full w-48 h-10 font-semibold bg-[#6366f1] hover:bg-white hover:text-[#6366f1] hover:border-2 hover:border-[#6366f1] transition-all duration-300"
+            onClick={() => {
+              router.push("/registerPayment");
+            }}
+          >
+            Registrar Pagos
+          </button>
+        </div>
+      </main>
+    </ProtectedRoute>
   );
 }
