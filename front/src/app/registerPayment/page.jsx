@@ -113,10 +113,15 @@ export default function RegisterPayment() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let amountToSend = payment.amount.replace(/\./g, "").replace(/^0+/, "");
-    amountToSend = amountToSend.replace(/,/g, ".");
+    const amountWithoutDots = payment.amount
+      .replace(/\./g, "")
+      .replace(/^0+/, "");
+    const amountToSend = amountWithoutDots.replace(/,/g, ".");
 
-    const formErrors = validatePaymentForm(payment);
+    const formErrors = validatePaymentForm({
+      ...payment,
+      amount: amountToSend,
+    });
 
     if (Object.keys(formErrors).length === 0) {
       try {
