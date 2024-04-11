@@ -144,13 +144,13 @@ export default function RegisterPayment() {
   return (
     <ProtectedRoute>
       <main class="flex flex-col items-center justify-center h-screen gap-4">
-        <div class="w-1/3 flex items-center justify-between">
+        <div class="md:w-2/4 lg:w-1/3 flex items-center justify-between">
           <h1 class="text-5xl text-[#6366f1] font-semibold tracking-tighter">
             Registrar Pagos
           </h1>
           <LogOutButton />
         </div>
-        <div class="flex flex-col items-center w-1/3 h-1/2 rounded-3xl bg-[#6366f1]">
+        <div class="flex flex-col items-center md:w-2/4 lg:w-1/3 md:h-3/5 lg:h-1/2 rounded-3xl bg-[#6366f1]">
           <form class="flex flex-col items-center justify-center gap-4 w-full h-full">
             <div class="flex flex-col w-1/2 gap-1 relative">
               <div class="flex items-center justify-between">

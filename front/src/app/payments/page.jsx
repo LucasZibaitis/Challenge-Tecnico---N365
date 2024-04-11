@@ -179,13 +179,13 @@ export default function Payments() {
   return (
     <ProtectedRoute>
       <main class="flex flex-col items-center justify-center h-screen gap-4">
-        <div class="w-2/5 flex items-center justify-between">
+        <div class="md:w-3/5 lg:w-2/5 flex items-center justify-between">
           <h1 class="text-5xl text-[#6366f1] font-semibold tracking-tighter">
             Historial de Pagos
           </h1>
           <LogOutButton />
         </div>
-        <div class="flex w-2/5 h-5/6 rounded-3xl bg-[#6366f1]">
+        <div class="flex md:w-3/5 lg:w-2/5 lg:h-5/6 rounded-3xl bg-[#6366f1]">
           <div class="w-1/2 flex flex-col items-center gap-4 py-6">
             <div class="flex flex-col w-4/5 gap-1">
               <label class="text-white">Buscar por destinatario</label>
@@ -315,7 +315,7 @@ export default function Payments() {
             </div>
           </div>
         </div>
-        <div class="w-2/5 flex items-center justify-between gap-4">
+        <div class="md:w-3/5 lg:w-2/5 flex items-center justify-between gap-4">
           <button
             class="text-white rounded-full w-48 h-10 font-semibold bg-[#6366f1] hover:bg-white hover:text-[#6366f1] hover:border-2 hover:border-[#6366f1] transition-all duration-300"
             onClick={() => {
