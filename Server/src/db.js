@@ -2,9 +2,21 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 
-const sequelize = new Sequelize(
-  "postgres://theagency:cnFsLr4qMxKHebIkSaIue3AjQhjtmHya@dpg-coc4lg63e1ms73aukncg-a/theagency"
-);
+const HOSTNAME = "dpg-coc4lg63e1ms73aukncg-a";
+const PORT = 5432;
+const DATABASE = "theagency";
+const USERNAME = "theagency_user";
+const PASSWORD = "cnFsLr4qMxKHebIkSaIue3AjQhjtmHya";
+
+const sequelize = new Sequelize(DATABASE, USERNAME, PASSWORD, {
+  host: HOSTNAME,
+  port: PORT,
+  dialect: "postgres",
+});
+
+// const sequelize = new Sequelize(
+//   "postgres://theagency:cnFsLr4qMxKHebIkSaIue3AjQhjtmHya@dpg-coc4lg63e1ms73aukncg-a/theagency"
+// );
 
 const basename = path.basename(__filename);
 const modelDefiners = [];
