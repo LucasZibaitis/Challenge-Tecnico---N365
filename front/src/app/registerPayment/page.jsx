@@ -124,7 +124,7 @@ export default function RegisterPayment() {
 
         await axios
           .post(
-            "http://localhost:3001/postPayment",
+            "https://the-agency-ct.onrender.com/postPayment",
             { ...payment, amount: amountToSend },
             config
           )

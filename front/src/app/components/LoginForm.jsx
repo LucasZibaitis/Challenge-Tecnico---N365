@@ -30,7 +30,7 @@ export default function LoginForm({ setRegisterClicked, registerClicked }) {
     if (Object.keys(formErrors).length === 0) {
       try {
         await axios
-          .post("http://localhost:3001/postLoggedUser", userData)
+          .post("https://the-agency-ct.onrender.com/postLoggedUser", userData)
           .then((response) => {
             localStorage.setItem("accessToken", response.data.accessToken);
             localStorage.setItem("userId", response.data.userId);

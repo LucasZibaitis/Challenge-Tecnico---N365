@@ -32,7 +32,7 @@ export default function RegisterForm({ setRegisterClicked, registerClicked }) {
     const formErrors = validateRegisterForm(userData);
     if (Object.keys(formErrors).length === 0) {
       try {
-        await axios.post("http://localhost:3001/postUser", userData);
+        await axios.post("https://the-agency-ct.onrender.com/postUser", userData);
         setRegisterClicked(false);
       } catch (error) {
         if (

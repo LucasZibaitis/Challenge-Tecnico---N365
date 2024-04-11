@@ -34,7 +34,7 @@ export default function Payments() {
       const userId = localStorage.getItem("userId");
       const config = { headers: { Authorization: `Bearer ${accessToken}` } };
       await axios
-        .get(`http://localhost:3001/getPaymentsById?userId=${userId}`, config)
+        .get(`https://the-agency-ct.onrender.com/getPaymentsById?userId=${userId}`, config)
         .then((response) => setPayments(response.data));
     } catch (error) {}
   };
@@ -44,7 +44,7 @@ export default function Payments() {
       const accessToken = localStorage.getItem("accessToken");
       const config = { headers: { Authorization: `Bearer ${accessToken}` } };
       await axios.delete(
-        `http://localhost:3001/deletePayment?id=${id}`,
+        `https://the-agency-ct.onrender.com/deletePayment?id=${id}`,
         config
       );
       fetchPayments();
