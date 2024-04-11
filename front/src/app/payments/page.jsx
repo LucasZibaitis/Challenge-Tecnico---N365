@@ -34,7 +34,10 @@ export default function Payments() {
       const userId = localStorage.getItem("userId");
       const config = { headers: { Authorization: `Bearer ${accessToken}` } };
       await axios
-        .get(`https://the-agency-ct.onrender.com/getPaymentsById?userId=${userId}`, config)
+        .get(
+          `https://the-agency-ct.onrender.com/getPaymentsById?userId=${userId}`,
+          config
+        )
         .then((response) => setPayments(response.data));
     } catch (error) {}
   };
@@ -83,6 +86,15 @@ export default function Payments() {
     if (filterType !== "Todos") {
       filteredPayments = filteredPayments.filter(
         (payment) => payment.type === filterType
+      );
+    } else if (filterDate === "otro") {
+      filteredPayments = filteredPayments.filter(
+        (payment) =>
+          payment.type !== "Efectivo" &&
+          payment.type !== "Tarjeta de Débito" &&
+          payment.type !== "Tarjeta de Crédito" &&
+          payment.type !== "Depósito" &&
+          payment.type !== "Transferencia"
       );
     }
 
