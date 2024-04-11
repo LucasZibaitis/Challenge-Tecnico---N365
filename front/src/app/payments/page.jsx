@@ -84,20 +84,23 @@ export default function Payments() {
   const applyFiltersAndSort = () => {
     let filteredPayments = [...payments];
     if (filterType !== "Todos") {
-      filteredPayments = filteredPayments.filter(
-        (payment) => payment.type === filterType
-      );
-    } else if (filterDate === "otro") {
-      filteredPayments = filteredPayments.filter(
-        (payment) =>
-          payment.type !== "Efectivo" &&
-          payment.type !== "Tarjeta de Débito" &&
-          payment.type !== "Tarjeta de Crédito" &&
-          payment.type !== "Depósito" &&
-          payment.type !== "Transferencia"
-      );
+      if (filterType === "otro") {
+        const allowedTypes = [
+          "Efectivo",
+          "Tarjeta de Débito",
+          "Tarjeta de Crédito",
+          "Depósito",
+          "Transferencia",
+        ];
+        filteredPayments = filteredPayments.filter(
+          (payment) => !allowedTypes.includes(payment.type)
+        );
+      } else {
+        filteredPayments = filteredPayments.filter(
+          (payment) => payment.type === filterType
+        );
+      }
     }
-
     if (filterDate) {
       filteredPayments = filteredPayments.filter(
         (payment) => payment.date === filterDate
