@@ -3,8 +3,6 @@ export default function validatePaymentForm(payment) {
   const onlyLettersRegex = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{1,50}$/;
   const onlyNumbersRegex = /^-?\d+(\.\d+)?$/;
 
-  console.log(payment.amount);
-
   if (!payment.amount) {
     errors.amount = "Ingrese un monto*";
   } else if (!onlyNumbersRegex.test(payment.amount)) {
@@ -22,6 +20,8 @@ export default function validatePaymentForm(payment) {
     errors.type = "Ingrese un tipo de pago*";
   } else if (!onlyLettersRegex.test(payment.type)) {
     errors.type = "El tipo de pago debe contener solo letras*";
+  } else if (payment.type.length > 20) {
+    errors.type = "El tipo de pago debe tener un máximo de 20 caracteres*";
   }
   if (!payment.recipient) {
     errors.recipient = "Ingrese un destinatario*";
