@@ -1,4 +1,4 @@
-# Gestión de Pagos Bancarios - Desafío Técnico
+# Gestión de Pagos Bancarios - Challenge Técnico N365
 
 ## Instrucciones de Instalación
 
