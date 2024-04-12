@@ -2,6 +2,7 @@ export default function validateRegisterForm(form) {
   const errors = {};
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const nameRegex = /^[A-Za-zñÑ]+$/;
+  const passwordRegex = /^\S*$/;
   if (!form.name) {
     errors.name = "Debe ingresar un nombre*";
   } else if (form.name.length > 30) {
@@ -26,6 +27,8 @@ export default function validateRegisterForm(form) {
     errors.password = "Debe ingresar una contraseña*";
   } else if (form.password.length < 8 || form.password.length > 64) {
     errors.password = "La contraseña debe tener entre 8 y 64 caracteres*";
+  } else if (!passwordRegex.test(form.password)) {
+    errors.password = "La contraseña no puede contener espacios*";
   }
   return errors;
 }

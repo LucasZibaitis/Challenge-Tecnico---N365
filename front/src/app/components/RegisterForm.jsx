@@ -21,10 +21,20 @@ export default function RegisterForm({ setRegisterClicked, registerClicked }) {
 
   const handleChange = (e) => {
     const { value, name } = e.target;
-    setUserData((prevUserData) => ({
-      ...prevUserData,
-      [name]: value,
-    }));
+
+    if (name === "password") {
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        [name]: value,
+      }));
+      return;
+    } else {
+      const trimmedValue = value.trim();
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        [name]: trimmedValue,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -32,7 +42,10 @@ export default function RegisterForm({ setRegisterClicked, registerClicked }) {
     const formErrors = validateRegisterForm(userData);
     if (Object.keys(formErrors).length === 0) {
       try {
-        await axios.post("https://the-agency-ct.onrender.com/postUser", userData);
+        await axios.post(
+          "https://the-agency-ct.onrender.com/postUser",
+          userData
+        );
         setRegisterClicked(false);
       } catch (error) {
         if (
