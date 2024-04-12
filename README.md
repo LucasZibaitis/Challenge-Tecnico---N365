@@ -1,7 +1,3 @@
-¡Claro, aquí tienes el texto para el README!
-
----
-
 # Gestión de Pagos Bancarios - Desafío Técnico
 
 ## Instrucciones de Instalación
