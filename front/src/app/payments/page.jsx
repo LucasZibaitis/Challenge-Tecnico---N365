@@ -46,6 +46,7 @@ export default function Payments() {
       console.log(error);
     } finally {
       setIsRenderLoading(false);
+      setIsDeleteLoading(false);
     }
   };
 
