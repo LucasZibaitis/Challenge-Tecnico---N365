@@ -1,20 +1,47 @@
-The Agency: Challenge Técnico - Lucas Zibaitis
+¡Claro, aquí tienes el texto para el README!
 
-Desafío: Aplicación de Gestión de Pagos Bancarios
-Descripción: El desafío consiste en crear una aplicación web para la gestión de pagos bancarios. Los usuarios podrán registrar nuevos pagos, ver la lista de pagos realizados y realizar búsquedas y filtrados en función de diferentes criterios.
-Requisitos:
+---
 
-1. Crear una API RESTful utilizando Node.js y Express para manejar las operaciones CRUD de pagos.
-2. Utilizar PostgreSQL como base de datos para almacenar la información de los pagos.
-3. Implementar una interfaz de usuario simple utilizando React que permita a los usuarios:
-   - Registrar nuevos pagos, incluyendo detalles como el monto, la fecha, el tipo de pago y el destinatario.
-   - Ver la lista de pagos realizados con la capacidad de filtrar por diferentes criterios, como fecha, monto, tipo de pago, etc.
-   - Realizar búsquedas en la lista de pagos utilizando un campo de búsqueda 
-4. Implementar una autenticación básica utilizando sesiones o tokens JWT para que los usuarios puedan iniciar sesión y acceder a la funcionalidad de la aplicación.
+# Gestión de Pagos Bancarios - Desafío Técnico
 
-Puntos adicionales:
+## Instrucciones de Instalación
 
-- Implementar pruebas básicas para al menos una parte del sistema (por ejemplo, la API).
-- Mejorar el diseño y la usabilidad de la interfaz de usuario utilizando Styled component, Tailwind Css.
-- Agregar validaciones de entrada en el frontend y backend para garantizar la integridad de los datos.
-- Implementar la capacidad de exportar la lista de pagos a un archivo CSV o Excel.
+Para configurar el entorno de desarrollo local, sigue estos pasos:
+
+1. Clona este repositorio en tu máquina local.
+2. Abre una terminal y navega hasta la carpeta `Server`.
+3. Ejecuta `npm install` para instalar las dependencias del servidor.
+4. Luego, navega hasta la carpeta `Front`.
+5. Ejecuta `npm install` para instalar las dependencias del frontend.
+
+## Configuración de la Base de Datos
+
+Para que la base de datos funcione localmente, es necesario modificar las siguientes variables en el archivo `Server/src/db.js`:
+
+- `DATABASE`
+- `USERNAME`
+- `PASSWORD`
+- `HOSTNAME`
+- `PORT`
+
+Ajusta estas variables según tu configuración local de PostgreSQL.
+
+## Configuración de la Aplicación
+
+Para utilizar la aplicación localmente, debes cambiar los endpoints de las solicitudes realizadas desde el frontend para que apunten a tu URL local. Esto se hace modificando los archivos siguientes:
+
+- `front/src/app/components/LoginForm.jsx`
+- `front/src/app/components/RegisterForm.jsx`
+- `front/src/app/registerPayment/page.jsx`
+- `front/src/app/payments/page.jsx`
+
+Reemplaza las URLs actuales por tu nueva URL local, por ejemplo: `localhost:3001`.
+
+## Cómo Ejecutar la Aplicación
+
+Una vez que hayas realizado las configuraciones necesarias, puedes iniciar la aplicación localmente de la siguiente manera:
+
+1. Desde la carpeta `Front`, ejecuta `npm run dev` para levantar el frontend.
+2. Desde la carpeta `Server`, ejecuta `npm start` para levantar el backend.
+
+Ahora la aplicación debería estar disponible localmente en tu navegador.
