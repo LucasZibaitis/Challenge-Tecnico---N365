@@ -14,10 +14,6 @@ const sequelize = new Sequelize(DATABASE, USERNAME, PASSWORD, {
   dialect: "postgres",
 });
 
-// const sequelize = new Sequelize(
-//   "postgres://theagency:cnFsLr4qMxKHebIkSaIue3AjQhjtmHya@dpg-coc4lg63e1ms73aukncg-a/theagency"
-// );
-
 const basename = path.basename(__filename);
 const modelDefiners = [];
 
